@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 
 /**
@@ -19,6 +20,10 @@ function rank(pathname) {
 export default defineConfig({
 	site: 'https://itsfree.ai',
 	trailingSlash: 'ignore',
+	adapter: cloudflare({
+		imageService: 'passthrough'
+	}),
+	session: false,
 	integrations: [
 		sitemap({
 			filter: (page) => !page.includes('/404'),

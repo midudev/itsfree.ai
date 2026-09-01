@@ -1,0 +1,10 @@
+{
+	"name": "itsfree-ai",
+	"compatibility_date": "2026-09-01",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist/client",
+		"binding": "ASSETS",
+		"not_found_handling": "404-page"
+	}
+}

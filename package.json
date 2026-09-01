@@ -9,6 +9,7 @@
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
+		"deploy": "astro build && wrangler deploy",
 		"astro": "astro",
 		"icons": "python3 scripts/fetch-favicons.py",
 		"fonts": "python3 scripts/build-fonts.py",
@@ -16,7 +17,11 @@
 		"favicons": "python3 scripts/build-favicons.py"
 	},
 	"dependencies": {
+		"@astrojs/cloudflare": "^14.2.6",
 		"@astrojs/sitemap": "^3.7.3",
 		"astro": "^7.2.9"
+	},
+	"devDependencies": {
+		"wrangler": "^4.127.1"
 	}
 }
