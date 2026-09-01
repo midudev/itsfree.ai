@@ -1,0 +1,339 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import ResourceCard from '../../components/ResourceCard.astro';
+import Favicon from '../../components/Favicon.astro';
+import { MODELS, VENDORS, type Model } from '../../data/models';
+import { resourcesForModel, groupOf } from '../../data/resources';
+import { breadcrumbSchema, itemListSchema } from '../../lib/seo';
+
+export function getStaticPaths() {
+	return MODELS.map((model) => ({ params: { slug: model.slug }, props: { model } }));
+}
+
+interface Props {
+	model: Model;
+}
+
+const { model } = Astro.props;
+const vendor = VENDORS[model.vendor];
+const resources = resourcesForModel(model.slug);
+const access = resources.filter((resource) => groupOf(resource) === 'access');
+const toolbox = resources.filter((resource) => groupOf(resource) === 'toolbox');
+const noCard = access.filter((resource) => resource.noCard).length;
+const noCardCopy =
+	noCard === access.length
+		? `All ${access.length} of them ask for no credit card.`
+		: `${noCard} of these ${access.length} providers ask for no credit card.`;
+
+const related = MODELS.filter(
+	(other) => other.slug !== model.slug && other.tags.some((tag) => model.tags.includes(tag))
+).slice(0, 6);
+
+const title = `Use ${model.name} for free — ${resources.length} ways, compared`;
+const description = `${resources.length} free routes to ${model.name} by ${vendor.name}${
+	model.context ? `, up to ${model.context} of context` : ''
+}: which providers serve it at no cost, their limits and what each one asks for.`;
+
+const schemas = [
+	breadcrumbSchema([
+		{ name: 'Resources', path: '/' },
+		{ name: 'Models', path: '/models/' },
+		{ name: model.name, path: `/model/${model.slug}/` }
+	]),
+	itemListSchema(
+		`Free ways to use ${model.name}`,
+		resources.map((resource) => ({ name: resource.name, path: `/provider/${resource.id}/` }))
+	)
+];
+---
+
+<Layout title={title} description={description} schemas={schemas}>
+	<SiteHeader />
+
+	<main class="wrap">
+		<nav class="crumbs" aria-label="Breadcrumb">
+			<a href="/">Resources</a>
+			<span aria-hidden="true">/</span>
+			<a href="/models/">Models</a>
+			<span aria-hidden="true">/</span>
+			<span aria-current="page">{model.name}</span>
+		</nav>
+
+		<section class="hero">
+			<Favicon id={model.vendor} kind="vendors" size={48} alt={vendor.name} />
+			<div>
+				<p class="vendor">{vendor.name}</p>
+				<h1>Use {model.name} for free</h1>
+			</div>
+		</section>
+
+		<p class="lede">{model.description}</p>
+
+		<dl class="specs">
+			{
+				model.apiId && (
+					<div>
+						<dt>API id</dt>
+						<dd class="mono">{model.apiId}</dd>
+					</div>
+				)
+			}
+			{
+				model.context && (
+					<div>
+						<dt>Context</dt>
+						<dd class="mono">{model.context}</dd>
+					</div>
+				)
+			}
+			<div>
+				<dt>Weights</dt>
+				<dd class="mono">{model.openWeights ? 'Open' : 'Closed'}</dd>
+			</div>
+			<div>
+				<dt>Free routes</dt>
+				<dd class="mono">{resources.length}</dd>
+			</div>
+		</dl>
+
+		<ul class="tags">
+			{model.tags.map((tag) => <li>{tag}</li>)}
+		</ul>
+
+		{
+			access.length > 0 && (
+				<section class="block">
+					<header class="block-head">
+						<h2>Where to run {model.name} for free</h2>
+						<p>{noCardCopy}</p>
+					</header>
+					<div class="grid">
+						{access.map((resource) => (
+							<ResourceCard resource={resource} omitModel={model.slug} />
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			toolbox.length > 0 && (
+				<section class="block">
+					<header class="block-head">
+						<h2>Tools that work with it</h2>
+						<p>Editors, agents and clients you can point at {model.name}.</p>
+					</header>
+					<div class="grid">
+						{toolbox.map((resource) => (
+							<ResourceCard resource={resource} omitModel={model.slug} />
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			related.length > 0 && (
+				<section class="block">
+					<header class="block-head">
+						<h2>Similar models</h2>
+						<p>Same territory, also free somewhere.</p>
+					</header>
+					<ul class="related">
+						{related.map((other) => (
+							<li>
+								<a href={`/model/${other.slug}/`}>
+									<Favicon id={other.vendor} kind="vendors" size={18} />
+									<span>{other.name}</span>
+									<span class="related-vendor">{VENDORS[other.vendor].name}</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+	</main>
+
+	<SiteFooter mesh />
+</Layout>
+
+<style>
+	main {
+		padding-bottom: 56px;
+	}
+
+
+
+
+
+
+
+
+	.crumbs {
+		display: flex;
+		gap: 8px;
+		padding-top: 28px;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-faint);
+	}
+
+	.crumbs a:hover {
+		color: var(--fg);
+	}
+
+	.hero {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 24px 0 16px;
+	}
+
+	.vendor {
+		margin: 0 0 2px;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-faint);
+	}
+
+	.hero h1 {
+		margin: 0;
+		font-size: clamp(28px, 5vw, 40px);
+		line-height: 1.08;
+		letter-spacing: -0.04em;
+		font-weight: 600;
+	}
+
+	.lede {
+		max-width: 62ch;
+		margin: 0 0 28px;
+		color: var(--fg-muted);
+		font-size: 15.5px;
+		line-height: 1.6;
+	}
+
+	.specs {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 1px;
+		margin: 0;
+		background: var(--border);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		overflow: hidden;
+	}
+
+	.specs div {
+		background: var(--bg-raised);
+		padding: 14px 16px;
+	}
+
+	.specs dt {
+		font-size: 11.5px;
+		color: var(--fg-faint);
+		margin-bottom: 4px;
+	}
+
+	.specs dd {
+		margin: 0;
+		font-size: 13px;
+		word-break: break-all;
+	}
+
+	.mono {
+		font-family: var(--font-mono);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin: 14px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tags li {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-muted);
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 3px 10px;
+	}
+
+	.block {
+		margin-top: 48px;
+	}
+
+	.block-head {
+		padding-bottom: 14px;
+		margin-bottom: 16px;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.block-head h2 {
+		margin: 0 0 4px;
+		font-size: 17px;
+		font-weight: 550;
+		letter-spacing: -0.025em;
+	}
+
+	.block-head p {
+		margin: 0;
+		font-size: 13px;
+		color: var(--fg-muted);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 12px;
+	}
+
+	.related {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.related a {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		padding: 10px 12px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		font-size: 13.5px;
+		transition:
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.related a:hover {
+		border-color: var(--border-strong);
+		background: var(--bg-hover);
+	}
+
+	.related-vendor {
+		margin-left: auto;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		color: var(--fg-faint);
+	}
+
+
+
+
+	@media (max-width: 640px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,431 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { COLLECTIONS } from '../data/collections';
+
+const HINTS: Record<string, string> = {
+	'free-ai-apis-without-credit-card': 'No card on file',
+	'free-ai-apis-without-signup': 'No account needed',
+	'openai-compatible-free-apis': 'Swap a base URL and go',
+	'run-ai-models-locally': 'No quota, nothing leaves the laptop',
+	'free-ai-coding-agents': 'Pair them with a free key'
+};
+
+const ways = [
+	{
+		href: '/',
+		label: 'Every free provider and runtime',
+		hint: 'The full directory'
+	},
+	{
+		href: '/models/',
+		label: 'Every model with a free route',
+		hint: 'Who serves each one at no cost'
+	},
+	...COLLECTIONS.map((collection) => ({
+		href: `/${collection.slug}/`,
+		label: collection.heading,
+		hint: HINTS[collection.slug] ?? collection.title
+	}))
+];
+---
+
+<Layout
+	title="Page not found"
+	description="That page does not exist. Here is the way back to the free AI providers, models and runtimes."
+	noindex
+>
+	<SiteHeader />
+
+	<main class="wrap">
+		<section class="thread" aria-label="Chat">
+			<article class="turn you">
+				<p class="who">You</p>
+				<p class="bubble">
+					Where is <code data-lost>this page</code>?
+				</p>
+			</article>
+
+			<article class="turn bot">
+				<header class="who">
+					<span class="avatar" aria-hidden="true">*</span>
+					<span class="name">it's free*</span>
+					<span class="meta">404 · 0 tokens billed</span>
+				</header>
+
+				<div class="reply">
+					<h1>That page moved, or never existed.</h1>
+					<p class="lede">
+						Providers get renamed and free tiers disappear, so links here do rot. I still have the
+						directory — these are the places worth trying instead.
+					</p>
+
+					<p class="sources-label">Sources</p>
+					<ul class="ways">
+						{
+							ways.map((way) => (
+								<li>
+									<a href={way.href}>
+										<span class="way-copy">
+											<span class="way-label">{way.label}</span>
+											<span class="way-hint">{way.hint}</span>
+										</span>
+										<svg
+											viewBox="0 0 24 24"
+											width="14"
+											height="14"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											aria-hidden="true"
+										>
+											<path d="M5 12h14" />
+											<path d="m13 6 6 6-6 6" />
+										</svg>
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</article>
+		</section>
+
+		<form class="composer" action="/" method="get" role="search">
+			<label class="sr" for="q">Search the directory</label>
+			<input
+				id="q"
+				name="q"
+				type="search"
+				placeholder="Ask for a free model or provider"
+				autocomplete="off"
+			/>
+			<button type="submit">
+				Send
+				<svg
+					viewBox="0 0 24 24"
+					width="13"
+					height="13"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M5 12h14" />
+					<path d="m13 6 6 6-6 6" />
+				</svg>
+			</button>
+		</form>
+	</main>
+
+	<SiteFooter />
+</Layout>
+
+<script>
+	const lost = document.querySelector<HTMLElement>('[data-lost]');
+	const path = location.pathname.replace(/\/+$/, '') || '/';
+
+	if (lost && path !== '/404') {
+		lost.textContent = path === '/' ? '/' : `${path}/`;
+	}
+</script>
+
+<style>
+	main {
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+		max-width: 720px;
+		padding-block: 36px 48px;
+	}
+
+	.thread {
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+	}
+
+	.turn {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		animation: rise 0.45s ease both;
+	}
+
+	.turn.bot {
+		animation-delay: 0.16s;
+	}
+
+	.you {
+		align-items: flex-end;
+	}
+
+	.you .who {
+		margin: 0 14px 0 0;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--fg-dim);
+	}
+
+	.bubble {
+		max-width: min(36ch, 100%);
+		margin: 0;
+		padding: 12px 16px;
+		border: 1px solid var(--border);
+		border-radius: 18px 18px 4px 18px;
+		background: var(--bg-raised);
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--fg);
+		overflow-wrap: anywhere;
+	}
+
+	.bubble code {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--star);
+	}
+
+	.bot .who {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin: 0 0 4px;
+	}
+
+	.avatar {
+		display: grid;
+		place-items: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 8px;
+		background: #161208;
+		box-shadow: inset 0 0 0 1px rgb(240 180 41 / 0.28);
+		color: var(--star);
+		font-family: var(--font-mono);
+		font-size: 18px;
+		line-height: 1;
+	}
+
+	.name {
+		font-size: 14px;
+		font-weight: 550;
+		letter-spacing: -0.02em;
+	}
+
+	.meta {
+		margin-left: auto;
+		font-family: var(--font-pixel);
+		font-size: 11px;
+		letter-spacing: 0.06em;
+		color: var(--star);
+	}
+
+	.reply {
+		padding-left: 38px;
+	}
+
+	h1 {
+		margin: 0 0 12px;
+		font-size: clamp(26px, 4.4vw, 36px);
+		line-height: 1.08;
+		letter-spacing: -0.04em;
+		font-weight: 600;
+		text-wrap: balance;
+	}
+
+	.lede {
+		margin: 0 0 20px;
+		font-size: 15.5px;
+		line-height: 1.6;
+		color: var(--fg-muted);
+	}
+
+	.sources-label {
+		margin: 0 0 10px;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--fg-dim);
+	}
+
+	.ways {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.ways li:first-child {
+		grid-column: 1 / -1;
+	}
+
+	.ways a {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		height: 100%;
+		padding: 11px 12px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--bg-subtle);
+		transition:
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.ways a:hover {
+		border-color: var(--border-strong);
+		background: var(--bg-hover);
+	}
+
+	.ways svg {
+		flex: none;
+		color: var(--fg-faint);
+	}
+
+	.ways a:hover svg {
+		color: var(--star);
+	}
+
+	.way-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.way-label {
+		font-size: 14px;
+		letter-spacing: -0.015em;
+	}
+
+	.way-hint {
+		overflow: hidden;
+		font-size: 12.5px;
+		line-height: 1.4;
+		color: var(--fg-faint);
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	.composer {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-top: 8px;
+		padding: 8px 8px 8px 16px;
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		background: var(--bg-subtle);
+		animation: rise 0.45s ease both;
+		animation-delay: 0.32s;
+	}
+
+	.composer input {
+		flex: 1;
+		min-width: 0;
+		background: none;
+		border: none;
+		outline: none;
+		font-size: 14.5px;
+	}
+
+	.composer input::placeholder {
+		color: var(--fg-faint);
+	}
+
+	.composer input::-webkit-search-cancel-button {
+		appearance: none;
+	}
+
+	.composer button {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		flex: none;
+		padding: 8px 12px;
+		border: none;
+		border-radius: 9px;
+		background: var(--fg);
+		color: var(--bg);
+		font-size: 13px;
+		font-weight: 550;
+		cursor: pointer;
+	}
+
+	.composer button:hover {
+		opacity: 0.86;
+	}
+
+	.sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	@keyframes rise {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.turn,
+		.composer {
+			animation: none;
+		}
+	}
+
+	@media (max-width: 640px) {
+		main {
+			padding-block: 28px 40px;
+		}
+
+		.reply {
+			padding-left: 0;
+		}
+
+		.meta {
+			display: none;
+		}
+
+		.ways {
+			grid-template-columns: 1fr;
+		}
+
+		.way-hint {
+			display: none;
+		}
+
+		.composer {
+			padding-left: 12px;
+		}
+
+		.composer button svg {
+			display: none;
+		}
+	}
+</style>

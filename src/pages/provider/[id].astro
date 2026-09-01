@@ -1,0 +1,603 @@
+---
+import { Code } from 'astro:components';
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Favicon from '../../components/Favicon.astro';
+import CopyButton from '../../components/CopyButton.astro';
+import { PROVIDERS, REQUIREMENT_LABEL, LAST_VERIFIED, type Provider } from '../../data/providers';
+import { RESOURCES, type Resource } from '../../data/resources';
+import { modelsOf, VENDORS } from '../../data/models';
+import { snippetsFor, envLine, isLocal } from '../../data/snippets';
+import { PROVIDER_ABOUT } from '../../data/provider-about';
+import { vercelDark } from '../../styles/code-theme';
+import { SITE, breadcrumbSchema } from '../../lib/seo';
+
+export function getStaticPaths() {
+	return RESOURCES.filter((resource) => PROVIDERS[resource.id]).map((resource) => ({
+		params: { id: resource.id },
+		props: { resource, provider: PROVIDERS[resource.id] }
+	}));
+}
+
+interface Props {
+	resource: Resource;
+	provider: Provider;
+}
+
+const { resource, provider } = Astro.props;
+const models = modelsOf(resource.models);
+const snippets = snippetsFor(provider);
+const local = isLocal(provider);
+const about = PROVIDER_ABOUT[resource.id] ?? [resource.description];
+
+const facts = [
+	provider.freeModels ? { label: 'Free models', value: String(provider.freeModels) } : null,
+	provider.maxContext ? { label: 'Max context', value: provider.maxContext } : null,
+	{ label: 'Free tier', value: resource.quota },
+	{ label: 'Requirement', value: REQUIREMENT_LABEL[provider.requirement] }
+].filter(Boolean) as { label: string; value: string }[];
+
+const title = `${resource.name} free tier — limits, API key and code`;
+const description = about[0];
+
+const schemas = [
+	breadcrumbSchema([
+		{ name: 'Resources', path: '/' },
+		{ name: resource.name, path: `/provider/${resource.id}/` }
+	]),
+	{
+		'@context': 'https://schema.org',
+		'@type': 'SoftwareApplication',
+		name: resource.name,
+		applicationCategory: 'DeveloperApplication',
+		description: about.join(' '),
+		url: resource.url,
+		operatingSystem: local ? 'macOS, Windows, Linux' : 'Any',
+		offers: {
+			'@type': 'Offer',
+			price: '0',
+			priceCurrency: 'USD',
+			description: resource.quota,
+			url: `${SITE}/provider/${resource.id}/`
+		},
+		featureList: [
+			provider.openaiCompatible ? 'OpenAI-compatible API' : null,
+			provider.maxContext ? `${provider.maxContext} context window` : null,
+			provider.freeModels ? `${provider.freeModels} free models` : null,
+			provider.rateLimit
+		].filter(Boolean)
+	}
+];
+---
+
+<Layout title={title} description={description} schemas={schemas}>
+	<SiteHeader />
+
+	<main class="wrap">
+		<nav class="crumbs" aria-label="Breadcrumb">
+			<a href="/">Resources</a>
+			<span aria-hidden="true">/</span>
+			<span aria-current="page">{resource.name}</span>
+		</nav>
+
+		<section class="hero">
+			<Favicon id={resource.id} size={62} alt={resource.name} />
+			<div class="hero-body">
+				<h1>{resource.name}</h1>
+				<p>{resource.description}</p>
+			</div>
+			<div class="actions">
+				<a class="cta" href={provider.apiKeyUrl} target="_blank" rel="noopener noreferrer">
+					{local ? 'Download' : 'Get API key'}
+					<span aria-hidden="true">↗</span>
+				</a>
+				{
+					provider.docsUrl && (
+						<a class="docs" href={provider.docsUrl} target="_blank" rel="noopener noreferrer">
+							Official docs ↗
+						</a>
+					)
+				}
+			</div>
+		</section>
+
+		<section class="intro">
+			{about.map((paragraph) => <p>{paragraph}</p>)}
+		</section>
+
+		<dl class="facts">
+			{
+				facts.map((fact) => (
+					<div>
+						<dt>{fact.label}</dt>
+						<dd>{fact.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+
+		<section class="block">
+			<h2>Endpoint</h2>
+			<div class="endpoint">
+				<div class="field">
+					<span class="field-label">Base URL</span>
+					<code>{provider.baseUrl}</code>
+					<CopyButton value={provider.baseUrl} label="Copy base URL" />
+				</div>
+				{
+					!local && (
+						<div class="field">
+							<span class="field-label">Env var</span>
+							<code>{provider.envVar}</code>
+							<CopyButton value={envLine(provider)} label="Copy export line" />
+						</div>
+					)
+				}
+				{
+					provider.rateLimit && (
+						<div class="field">
+							<span class="field-label">Rate limit</span>
+							<code>{provider.rateLimit}</code>
+						</div>
+					)
+				}
+			</div>
+
+			<ul class="traits">
+				{provider.openaiCompatible && <li>OpenAI-compatible</li>}
+				{provider.sdk && <li>Native SDK: {provider.sdk.name}</li>}
+				{provider.modalities?.map((modality) => <li class="muted">{modality}</li>)}
+			</ul>
+		</section>
+
+		{
+			snippets.length > 0 && (
+				<section class="block">
+					<h2>Code examples</h2>
+					<div class="tabs" data-tabs>
+						<div class="tablist" role="tablist">
+							{snippets.map((snippet, index) => (
+								<button
+									class:list={['tab', { 'is-active': index === 0 }]}
+									type="button"
+									role="tab"
+									aria-selected={index === 0}
+									data-tab={index}
+								>
+									{snippet.label}
+								</button>
+							))}
+						</div>
+						{snippets.map((snippet, index) => (
+							<div class="panel" data-panel={index} hidden={index !== 0}>
+								{snippet.install && (
+									<div class="install">
+										<code>{snippet.install}</code>
+										<CopyButton value={snippet.install} label="Copy install command" />
+									</div>
+								)}
+								<div class="code">
+									<Code code={snippet.code} lang={snippet.lang} theme={vercelDark} />
+									<CopyButton value={snippet.code} label="Copy code" floating />
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+			)
+		}
+
+		{
+			provider.gotchas && (
+				<section class="block">
+					<h2>Worth knowing</h2>
+					<ul class="gotchas">
+						{provider.gotchas.map((gotcha) => (
+							<li>{gotcha}</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+
+		{
+			models.length > 0 && (
+				<section class="block">
+					<h2>Models you get for free</h2>
+					<ul class="models">
+						{models.map((model) => (
+							<li>
+								<a href={`/model/${model.slug}/`}>
+									<Favicon id={model.vendor} kind="vendors" size={20} />
+									<span class="model-name">{model.name}</span>
+									{model.context && <span class="model-context">{model.context}</span>}
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+	</main>
+
+	<SiteFooter mesh />
+</Layout>
+
+<script>
+	for (const group of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
+		const tabs = [...group.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+		const panels = [...group.querySelectorAll<HTMLElement>('[data-panel]')];
+
+		group.addEventListener('click', (event) => {
+			const tab = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-tab]');
+			if (!tab) return;
+
+			for (const other of tabs) {
+				const active = other === tab;
+				other.classList.toggle('is-active', active);
+				other.setAttribute('aria-selected', String(active));
+			}
+			for (const panel of panels) panel.hidden = panel.dataset.panel !== tab.dataset.tab;
+		});
+	}
+</script>
+
+<style>
+	main {
+		padding-bottom: 56px;
+	}
+
+
+
+
+
+
+
+
+	.crumbs {
+		display: flex;
+		gap: 8px;
+		padding-top: 28px;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-faint);
+	}
+
+	.crumbs a:hover {
+		color: var(--fg);
+	}
+
+	.hero {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		padding: 24px 0 28px;
+	}
+
+	.hero-body {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 2px;
+		/* Matches the icon, so the pair reads as one block */
+		min-height: 62px;
+	}
+
+	.hero h1 {
+		margin: 0;
+		font-size: clamp(28px, 4vw, 36px);
+		line-height: 1.1;
+		letter-spacing: -0.035em;
+		font-weight: 600;
+	}
+
+	.hero p {
+		margin: 0;
+		max-width: 60ch;
+		color: var(--fg-muted);
+		font-size: 15px;
+		line-height: 1.35;
+	}
+
+	.intro {
+		max-width: 68ch;
+		margin: 0 0 32px;
+	}
+
+	.intro p {
+		margin: 0 0 14px;
+		font-size: 16.5px;
+		line-height: 1.6;
+		color: var(--fg-muted);
+		overflow-wrap: break-word;
+	}
+
+	.intro p:last-child {
+		margin-bottom: 0;
+	}
+
+	.actions {
+		flex: none;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 8px;
+	}
+
+	.docs {
+		text-align: center;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-faint);
+	}
+
+	.docs:hover {
+		color: var(--fg);
+	}
+
+	.cta {
+		flex: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 9px 16px;
+		border-radius: 8px;
+		background: var(--fg);
+		color: var(--bg);
+		font-size: 13.5px;
+		font-weight: 550;
+		transition: opacity 0.12s ease;
+	}
+
+	.cta:hover {
+		opacity: 0.85;
+	}
+
+	.facts {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 1px;
+		margin: 0;
+		background: var(--border);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.facts div {
+		background: var(--bg-raised);
+		padding: 13px 16px;
+	}
+
+	.facts dt {
+		font-size: 11px;
+		color: var(--fg-faint);
+		margin-bottom: 3px;
+	}
+
+	.facts dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+	}
+
+	.block {
+		margin-top: 44px;
+	}
+
+	.block h2 {
+		margin: 0 0 14px;
+		font-size: 17px;
+		font-weight: 550;
+		letter-spacing: -0.025em;
+	}
+
+	.endpoint {
+		display: grid;
+		gap: 1px;
+		background: var(--border);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.field {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 11px 14px;
+		background: var(--bg-raised);
+	}
+
+	.field-label {
+		flex: none;
+		width: 88px;
+		font-size: 11.5px;
+		color: var(--fg-faint);
+	}
+
+	.field code {
+		flex: 1;
+		min-width: 0;
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+	.traits {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin: 12px 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.traits li {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-muted);
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 3px 10px;
+	}
+
+	.traits .muted {
+		color: var(--fg-faint);
+	}
+
+	.tablist {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		margin-bottom: 10px;
+	}
+
+	.tab {
+		background: none;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 5px 12px;
+		font-size: 12.5px;
+		color: var(--fg-muted);
+		cursor: pointer;
+		transition:
+			color 0.12s ease,
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.tab:hover {
+		color: var(--fg);
+		border-color: var(--border-strong);
+	}
+
+	.tab.is-active {
+		background: var(--fg);
+		border-color: var(--fg);
+		color: var(--bg);
+	}
+
+	.install {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 9px 14px;
+		margin-bottom: 8px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--bg-subtle);
+	}
+
+	.install code {
+		flex: 1;
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+		color: var(--fg-muted);
+	}
+
+	.code {
+		position: relative;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.code :global(pre) {
+		margin: 0;
+		padding: 16px;
+		overflow-x: auto;
+		font-size: 12.5px;
+		line-height: 1.6;
+		background: var(--bg-subtle) !important;
+	}
+
+	.code :global(code) {
+		font-family: var(--font-mono);
+	}
+
+	.gotchas {
+		display: grid;
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.gotchas li {
+		position: relative;
+		padding: 11px 14px 11px 34px;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--bg-raised);
+		font-size: 13.5px;
+		color: var(--fg-muted);
+	}
+
+	.gotchas li::before {
+		content: '!';
+		position: absolute;
+		left: 14px;
+		font-family: var(--font-pixel);
+		color: var(--star);
+	}
+
+	.models {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.models a {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 12px;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		font-size: 13.5px;
+		transition:
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.models a:hover {
+		border-color: var(--border-strong);
+		background: var(--bg-hover);
+	}
+
+	.model-name {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.model-context {
+		margin-left: auto;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		color: var(--fg-faint);
+	}
+
+
+
+
+
+	@media (max-width: 640px) {
+		.hero {
+			flex-wrap: wrap;
+		}
+
+		.actions {
+			width: 100%;
+		}
+	}
+</style>

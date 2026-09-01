@@ -1,11 +1,615 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import HeroSpotlight from '../components/HeroSpotlight.astro';
+import ProviderTable from '../components/ProviderTable.astro';
+import RuntimeGrid from '../components/RuntimeGrid.astro';
+import ToolList from '../components/ToolList.astro';
+import { CATEGORIES, RESOURCES, resourcesOf } from '../data/resources';
+import { LAST_VERIFIED, PROVIDERS } from '../data/providers';
+import { FAQ } from '../data/faq';
+import { itemListSchema } from '../lib/seo';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const providers = resourcesOf('access').filter((resource) => PROVIDERS[resource.id]);
+const runtimes = resourcesOf('local');
+const tools = resourcesOf('toolbox');
+
+const total = RESOURCES.length;
+const freeModels = providers.reduce(
+	(sum, resource) => sum + (PROVIDERS[resource.id].freeModels ?? 0),
+	0
+);
+const noSignup = RESOURCES.filter((resource) => resource.noSignup).length;
+// The hardware checker earns a link from the local section, not just a row in it
+const hardwareCheck = RESOURCES.find((resource) => resource.id === 'can-i-run-ai')!;
+
+const stats = [
+	{ value: freeModels.toLocaleString('en-US'), label: 'free models' },
+	{ value: String(providers.length), label: 'providers' },
+	{ value: String(noSignup), label: 'need no account' },
+	{ value: String(runtimes.length), label: 'local runtimes' }
+];
+
+const FLAGS = [
+	{ id: 'noCard', label: 'no card' },
+	{ id: 'noSignup', label: 'no sign-up' },
+	{ id: 'openai', label: 'openai-compatible' },
+	{ id: 'pick', label: 'highlights' }
+];
+
+const title = 'Free AI APIs and models — every free tier, compared';
+const description = `Every free way to run an AI model: limits, context windows and base URLs for ${providers.length} providers with a real free tier, plus ${runtimes.length} local runtimes.`;
+
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: FAQ.map((entry) => ({
+		'@type': 'Question',
+		name: entry.question,
+		acceptedAnswer: { '@type': 'Answer', text: entry.answer }
+	}))
+};
+
+const providerListSchema = itemListSchema(
+	'Free AI API providers',
+	providers.map((resource) => ({ name: resource.name, path: `/provider/${resource.id}/` }))
+);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={title} description={description} schemas={[faqSchema, providerListSchema]}>
+	<SiteHeader current="home" />
+
+	<main>
+		<div class="wrap hero">
+			<div class="hero-copy">
+				<p class="eyebrow">Directory · verified {LAST_VERIFIED}</p>
+				<h1>Every free way to run an AI model.</h1>
+				<p class="lede">
+					Rate limits, context windows and base URLs for {providers.length} providers with a real free
+					tier — plus the runtimes that need no provider at all.
+				</p>
+
+				<dl class="stats">
+					{
+						stats.map((stat) => (
+							<div>
+								<dd>{stat.value}</dd>
+								<dt>{stat.label}</dt>
+							</div>
+						))
+					}
+				</dl>
+			</div>
+
+			<HeroSpotlight />
+		</div>
+
+		<div class="wrap">
+			<div class="console" role="search">
+				<span class="prompt">~/free-llm</span>
+				<span class="sigil">$</span>
+				<input
+					id="q"
+					type="search"
+					placeholder="filter"
+					autocomplete="off"
+					aria-label="Filter resources"
+				/>
+				<div class="chips" role="group" aria-label="Categories">
+					<button class="chip is-active" type="button" data-cat="all">all {total}</button>
+					{
+						CATEGORIES.map((category) => (
+							<button class="chip" type="button" data-cat={category.id} title={category.hint}>
+								{category.label.toLowerCase()}
+							</button>
+						))
+					}
+				</div>
+				<div class="chips" role="group" aria-label="Requirements">
+					{
+						FLAGS.map((flag) => (
+							<button class="chip" type="button" data-flag={flag.id}>
+								{flag.label}
+							</button>
+						))
+					}
+				</div>
+				<span class="count" aria-live="polite"><span data-count>{total}</span> results</span>
+				<button class="reset" type="button" data-reset hidden>clear</button>
+			</div>
+		</div>
+
+		<section class="wrap block" data-group="access">
+			<header class="block-head">
+				<div>
+					<h2>Free APIs</h2>
+					<p>Someone else's hardware, at no cost, sorted by how much they let you have.</p>
+				</div>
+				<span class="tally" data-group-count>{providers.length}</span>
+			</header>
+			<ProviderTable resources={providers} />
+		</section>
+
+		<section class="wrap block" data-group="local">
+			<header class="block-head">
+				<div>
+					<h2>Run it on your own machine</h2>
+					<p>
+						No quota, no key, no request leaving the laptop. Free forever, by definition — if the
+						model fits.
+					</p>
+				</div>
+				<div class="head-aside">
+					<a class="head-link" href={hardwareCheck.url} target="_blank" rel="noopener noreferrer">
+						{'Which models fit my machine?'}
+						<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M7 17 17 7"></path>
+							<path d="M9 7h8v8"></path>
+						</svg>
+					</a>
+					<span class="tally" data-group-count>{runtimes.length}</span>
+				</div>
+			</header>
+			<RuntimeGrid resources={runtimes} />
+		</section>
+
+		<section class="wrap block" data-group="toolbox">
+			<header class="block-head">
+				<div>
+					<h2>Around the models</h2>
+					<p>Free AI tooling that isn't a model: editors, playgrounds and the things that tell you what to pick.</p>
+				</div>
+				<span class="tally" data-group-count>{tools.length}</span>
+			</header>
+			<ToolList resources={tools} />
+		</section>
+
+		<p class="empty wrap" data-empty hidden>
+			Nothing matches. <button type="button" data-reset>Clear the filters</button>.
+		</p>
+
+		<section class="wrap block">
+			<header class="block-head">
+				<div>
+					<h2>Questions people actually ask</h2>
+					<p>Short answers. The long ones live on each provider page.</p>
+				</div>
+			</header>
+			<div class="faq">
+				{
+					FAQ.map((entry) => (
+						<div class="qa">
+							<h3>{entry.question}</h3>
+							<p>{entry.answer}</p>
+						</div>
+					))
+				}
+			</div>
+		</section>
+	</main>
+
+	<SiteFooter mesh />
+
 </Layout>
+
+<script>
+	const items = [...document.querySelectorAll<HTMLElement>('[data-resource]')];
+	const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')];
+	const input = document.querySelector<HTMLInputElement>('#q')!;
+	const catButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-cat]')];
+	const flagButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-flag]')];
+	const resetButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-reset]')];
+	const consoleReset = document.querySelector<HTMLButtonElement>('.console [data-reset]')!;
+	const countEl = document.querySelector<HTMLElement>('[data-count]')!;
+	const emptyEl = document.querySelector<HTMLElement>('[data-empty]')!;
+
+	const state = { query: '', category: 'all', flags: new Set<string>() };
+
+	function apply() {
+		const query = state.query.trim().toLowerCase();
+		let visible = 0;
+
+		for (const item of items) {
+			const matchesQuery = !query || item.dataset.search!.includes(query);
+			const matchesCategory = state.category === 'all' || item.dataset.category === state.category;
+			const matchesFlags = [...state.flags].every((flag) => item.dataset[flag] === 'true');
+			const show = matchesQuery && matchesCategory && matchesFlags;
+
+			item.hidden = !show;
+			if (show) visible++;
+		}
+
+		// A section disappears when none of its entries survive the filter
+		for (const group of groups) {
+			const shown = [...group.querySelectorAll<HTMLElement>('[data-resource]')].filter(
+				(item) => !item.hidden
+			).length;
+			group.hidden = shown === 0;
+			const tally = group.querySelector<HTMLElement>('[data-group-count]');
+			if (tally) tally.textContent = String(shown);
+		}
+
+		countEl.textContent = String(visible);
+		emptyEl.hidden = visible > 0;
+
+		const dirty = Boolean(query) || state.category !== 'all' || state.flags.size > 0;
+		consoleReset.hidden = !dirty;
+
+		syncUrl(dirty);
+	}
+
+	function syncUrl(dirty: boolean) {
+		const params = new URLSearchParams();
+		if (state.query) params.set('q', state.query);
+		if (state.category !== 'all') params.set('cat', state.category);
+		for (const flag of state.flags) params.append('f', flag);
+		history.replaceState(null, '', dirty ? `?${params}` : location.pathname);
+	}
+
+	function readUrl() {
+		const params = new URLSearchParams(location.search);
+		state.query = params.get('q') ?? '';
+		state.category = params.get('cat') ?? 'all';
+		for (const flag of params.getAll('f')) state.flags.add(flag);
+
+		input.value = state.query;
+		for (const button of catButtons) {
+			button.classList.toggle('is-active', button.dataset.cat === state.category);
+		}
+		for (const button of flagButtons) {
+			button.classList.toggle('is-active', state.flags.has(button.dataset.flag!));
+		}
+	}
+
+	input.addEventListener('input', () => {
+		state.query = input.value;
+		apply();
+	});
+
+	for (const button of catButtons) {
+		button.addEventListener('click', () => {
+			state.category = button.dataset.cat!;
+			for (const other of catButtons) other.classList.toggle('is-active', other === button);
+			apply();
+		});
+	}
+
+	for (const button of flagButtons) {
+		button.addEventListener('click', () => {
+			const flag = button.dataset.flag!;
+			if (state.flags.has(flag)) state.flags.delete(flag);
+			else state.flags.add(flag);
+			button.classList.toggle('is-active', state.flags.has(flag));
+			apply();
+		});
+	}
+
+	for (const button of resetButtons) {
+		button.addEventListener('click', () => {
+			state.query = '';
+			state.category = 'all';
+			state.flags.clear();
+			input.value = '';
+			for (const other of catButtons) other.classList.toggle('is-active', other.dataset.cat === 'all');
+			for (const other of flagButtons) other.classList.remove('is-active');
+			apply();
+			input.focus();
+		});
+	}
+
+	// `/` focuses the filter, Vercel-style
+	document.addEventListener('keydown', (event) => {
+		if (event.key === '/' && document.activeElement !== input) {
+			event.preventDefault();
+			input.focus();
+		}
+		if (event.key === 'Escape' && document.activeElement === input) input.blur();
+	});
+
+	readUrl();
+	apply();
+</script>
+
+<style>
+	.hero {
+		display: grid;
+		grid-template-columns: 1fr 380px;
+		gap: 56px;
+		align-items: start;
+		padding-block: 60px 46px;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.eyebrow {
+		margin: 0 0 20px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--star);
+	}
+
+	h1 {
+		margin: 0 0 18px;
+		max-width: 15ch;
+		font-size: clamp(34px, 5vw, 54px);
+		line-height: 1.02;
+		letter-spacing: -0.04em;
+		font-weight: 600;
+		text-wrap: balance;
+	}
+
+	.lede {
+		margin: 0;
+		max-width: 54ch;
+		font-size: 16.5px;
+		line-height: 1.55;
+		color: var(--fg-muted);
+	}
+
+	.stats {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 26px;
+		margin: 34px 0 0;
+		padding-top: 22px;
+		border-top: 1px solid var(--border);
+	}
+
+	.stats div {
+		display: flex;
+		align-items: baseline;
+		gap: 7px;
+	}
+
+	/* Hairline between each pair, without an element per divider */
+	.stats div + div::before {
+		content: '';
+		align-self: center;
+		width: 1px;
+		height: 14px;
+		margin-right: 19px;
+		background: var(--border-strong);
+	}
+
+	.stats dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 19px;
+		letter-spacing: -0.02em;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.stats dt {
+		font-size: 12px;
+		color: var(--fg-faint);
+	}
+
+	.console {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+		margin-block: 30px 8px;
+		padding: 11px 16px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--bg-subtle);
+	}
+
+	.prompt {
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+		color: var(--star);
+	}
+
+	.sigil {
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+		color: var(--fg-dim);
+	}
+
+	.console input {
+		width: 120px;
+		background: none;
+		border: none;
+		outline: none;
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+	}
+
+	.console input::placeholder {
+		color: var(--fg-faint);
+	}
+
+	.console input::-webkit-search-cancel-button {
+		appearance: none;
+	}
+
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	.chips + .chips {
+		margin-left: 6px;
+	}
+
+	.chip {
+		background: none;
+		border: 1px solid var(--border-strong);
+		border-radius: 999px;
+		padding: 4px 11px;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-muted);
+		cursor: pointer;
+		transition:
+			color 0.12s ease,
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.chip:hover {
+		color: var(--fg);
+		border-color: var(--fg-faint);
+	}
+
+	.chip.is-active {
+		background: var(--fg);
+		border-color: var(--fg);
+		color: var(--bg);
+	}
+
+	.count {
+		margin-left: auto;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-dim);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.reset {
+		background: none;
+		border: none;
+		padding: 0 2px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-faint);
+		cursor: pointer;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.reset:hover {
+		color: var(--fg);
+	}
+
+	.block {
+		padding-block: 30px 44px;
+		border-top: 1px solid var(--border);
+	}
+
+	.block:first-of-type {
+		border-top: none;
+	}
+
+	.block-head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 16px;
+		margin-bottom: 18px;
+	}
+
+	.block-head h2 {
+		margin: 0 0 5px;
+		font-size: 21px;
+		font-weight: 550;
+		letter-spacing: -0.03em;
+	}
+
+	.block-head p {
+		margin: 0;
+		max-width: 64ch;
+		font-size: 13.5px;
+		color: var(--fg-faint);
+	}
+
+	.head-aside {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		flex: none;
+	}
+
+	.head-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--star);
+		white-space: nowrap;
+	}
+
+	.head-link:hover {
+		color: var(--fg);
+	}
+
+	.tally {
+		flex: none;
+		font-family: var(--font-pixel);
+		font-size: 12px;
+		color: var(--fg-faint);
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 3px 11px;
+	}
+
+	.faq {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+		gap: 0 44px;
+	}
+
+	.qa {
+		padding: 18px 0;
+		border-bottom: 1px solid #161616;
+	}
+
+	.qa h3 {
+		margin: 0 0 8px;
+		font-size: 14.5px;
+		font-weight: 550;
+		letter-spacing: -0.015em;
+	}
+
+	.qa p {
+		margin: 0;
+		font-size: 13.5px;
+		line-height: 1.6;
+		color: var(--fg-muted);
+	}
+
+	.empty {
+		padding-block: 48px;
+		text-align: center;
+		color: var(--fg-muted);
+		font-size: 14px;
+	}
+
+	.empty button {
+		background: none;
+		border: none;
+		padding: 0;
+		color: var(--fg);
+		cursor: pointer;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	@media (max-width: 900px) {
+		.hero {
+			grid-template-columns: 1fr;
+			gap: 36px;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.hero {
+			padding-block: 40px 32px;
+		}
+
+		.head-link {
+			display: none;
+		}
+
+		.count {
+			margin-left: 0;
+		}
+	}
+</style>

@@ -1,0 +1,219 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Favicon from '../components/Favicon.astro';
+import { MODELS, VENDORS } from '../data/models';
+import { resourcesForModel } from '../data/resources';
+import { breadcrumbSchema, itemListSchema } from '../lib/seo';
+
+const models = MODELS.map((model) => ({
+	...model,
+	routes: resourcesForModel(model.slug).length
+})).sort((a, b) => b.routes - a.routes);
+
+const openWeights = models.filter((model) => model.openWeights).length;
+
+const title = `Free AI models — ${models.length} you can use at no cost`;
+const description = `Every AI model with a free route: ${models.length} models from ${Object.keys(VENDORS).length} vendors, and exactly which providers hand each one to you for nothing.`;
+
+const schemas = [
+	breadcrumbSchema([
+		{ name: 'Resources', path: '/' },
+		{ name: 'Models', path: '/models/' }
+	]),
+	itemListSchema(
+		'Free AI models',
+		models.map((model) => ({ name: model.name, path: `/model/${model.slug}/` }))
+	)
+];
+---
+
+<Layout title={title} description={description} schemas={schemas}>
+	<SiteHeader current="models" />
+
+	<main class="wrap">
+		<section class="hero">
+			<h1>Every model you can use <em>for free</em>.</h1>
+			<p>Pick a model and see exactly which providers hand it to you at zero cost.</p>
+			<dl class="stats">
+				<div>
+					<dt>Models</dt>
+					<dd>{models.length}</dd>
+				</div>
+				<div>
+					<dt>Open weights</dt>
+					<dd>{openWeights}</dd>
+				</div>
+				<div>
+					<dt>Vendors</dt>
+					<dd>{Object.keys(VENDORS).length}</dd>
+				</div>
+			</dl>
+		</section>
+
+		<ul class="list">
+			{
+				models.map((model) => (
+					<li>
+						<a href={`/model/${model.slug}/`}>
+							<Favicon id={model.vendor} kind="vendors" size={28} alt={VENDORS[model.vendor].name} />
+							<span class="body">
+								<span class="name">{model.name}</span>
+								<span class="desc">{model.description}</span>
+							</span>
+							<span class="meta">
+								<span class="routes">{model.routes} free</span>
+								{model.openWeights && <span class="open">open</span>}
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</main>
+
+	<SiteFooter mesh />
+</Layout>
+
+<style>
+	main {
+		padding-bottom: 56px;
+	}
+
+
+
+
+
+
+
+
+	.hero {
+		padding: 64px 0 36px;
+		max-width: 620px;
+	}
+
+	.hero h1 {
+		margin: 0 0 12px;
+		font-size: clamp(30px, 5.5vw, 44px);
+		line-height: 1.07;
+		letter-spacing: -0.04em;
+		font-weight: 600;
+	}
+
+	.hero h1 em {
+		font-style: normal;
+		color: var(--fg-muted);
+	}
+
+	.hero p {
+		margin: 0;
+		color: var(--fg-muted);
+		font-size: 15.5px;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1px;
+		margin: 28px 0 0;
+		background: var(--border);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.stats div {
+		background: var(--bg-raised);
+		padding: 12px 14px;
+	}
+
+	.stats dt {
+		font-size: 11px;
+		color: var(--fg-faint);
+	}
+
+	.stats dd {
+		margin: 2px 0 0;
+		font-family: var(--font-pixel);
+		font-size: 22px;
+		line-height: 1.1;
+		color: var(--fg);
+	}
+
+	.list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		overflow: hidden;
+	}
+
+	.list li + li {
+		border-top: 1px solid var(--border);
+	}
+
+	.list a {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 14px 16px;
+		background: var(--bg-raised);
+		transition: background 0.12s ease;
+	}
+
+	.list a:hover {
+		background: var(--bg-hover);
+	}
+
+	.body {
+		display: grid;
+		gap: 2px;
+		min-width: 0;
+		flex: 1;
+	}
+
+	.name {
+		font-size: 14.5px;
+		font-weight: 550;
+		letter-spacing: -0.02em;
+	}
+
+	.desc {
+		font-size: 13px;
+		color: var(--fg-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.meta {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex: none;
+		font-family: var(--font-mono);
+		font-size: 11px;
+	}
+
+	.routes {
+		color: var(--fg-muted);
+	}
+
+	.open {
+		color: var(--fg-faint);
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		padding: 2px 8px;
+	}
+
+
+
+
+	@media (max-width: 640px) {
+		.desc {
+			display: none;
+		}
+	}
+</style>
