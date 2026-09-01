@@ -1,46 +1,33 @@
-# Astro Starter Kit: Basics
+# it's free*
+
+Every free way to run an AI model. Live at [itsfree.ai](https://itsfree.ai).
+
+[![it's free*](public/og.png)](https://itsfree.ai)
+
+Rate limits, context windows and base URLs for every provider with a real free tier — plus the runtimes that need no provider at all.
+
+\* Free tiers change without warning. Check the limits before you depend on one.
+
+## Data
+
+The catalog is TypeScript, not a CMS. Edit the files; the pages follow.
+
+- [`src/data/resources.ts`](src/data/resources.ts) — every entry
+- [`src/data/providers.ts`](src/data/providers.ts) — limits, base URLs, last verified
+- [`src/data/models.ts`](src/data/models.ts) — models with a free route
+- [`src/data/collections.ts`](src/data/collections.ts) — grouped by need
+
+## Develop
+
+Node 22.12+ and [pnpm](https://pnpm.io).
 
 ```sh
-pnpm create astro@latest -- --template basics
+pnpm install
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```sh
+pnpm build
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+`pnpm og` and `pnpm favicons` rebuild the share cards and the icon set. Only needed when the catalog or the mark changes.
