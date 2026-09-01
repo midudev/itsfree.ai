@@ -1,0 +1,81 @@
+{
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Design"
+    },
+    {
+      "id": "page-2",
+      "name": "Explorations"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "itsfree.ai \u2014 home",
+      "page": "page-1",
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 3560,
+      "is_interactive": true
+    },
+    {
+      "file": "Console.dc.html",
+      "title": "B \u00b7 Console (sketch)",
+      "page": "page-2",
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 1520,
+      "is_interactive": true
+    },
+    {
+      "file": "Index.dc.html",
+      "title": "C \u00b7 Index (sketch)",
+      "page": "page-2",
+      "x": 1320,
+      "y": 0,
+      "w": 1200,
+      "h": 1760
+    }
+  ],
+  "annotations": [
+    {
+      "id": "built",
+      "page": "page-1",
+      "x": 1320,
+      "y": 0,
+      "w": 400,
+      "text": "WHAT CHANGED FROM THE SKETCH\n\nDark throughout \u2014 black ground, amber accent carried over from B.\n\nB's console voice folded into A's structure: mono for every number, a ~/free-llm prompt line instead of plain text filters, and a copy chip that appears on row hover so the base URL is one click away.\n\nReal favicons back on every provider, on the same white/dark tile logic the live site uses \u2014 pale logos (Ollama, Cohere) get the dark tile so they don't vanish.\n\nThe hero gap now holds a rotating recommendation: five picks, one every 5s, with the killer number pulled out and a progress bar. Dots are clickable; the rotation speed is a tweak."
+    },
+    {
+      "id": "seo",
+      "page": "page-1",
+      "x": 1320,
+      "y": 560,
+      "w": 400,
+      "text": "SEO STILL INTACT\n\nThe rotating card is decoration around the H1, not the H1 \u2014 the headline, the intro paragraph and the whole table render server-side in the HTML.\n\nThe table stays a real <table> with <thead>/<th>: that's what wins the \"free LLM API rate limits\" snippet.\n\nFilter chips remain <a href> links to /?cat=\u2026 , so every filtered view is its own crawlable URL.\n\nOnly the rotation and the copy chip need JS."
+    },
+    {
+      "id": "dir-b",
+      "page": "page-2",
+      "x": 0,
+      "y": 1580,
+      "w": 380,
+      "text": "B \u00b7 CONSOLE \u2014 not chosen, but its voice moved into the final: mono data, amber accent, the prompt line, the copy-on-hover.\n\nWhat stayed behind: the snippet panel driven by row selection. Worth revisiting for the provider pages, where it already exists."
+    },
+    {
+      "id": "dir-c",
+      "page": "page-2",
+      "x": 2640,
+      "y": 1820,
+      "w": 380,
+      "text": "C \u00b7 INDEX \u2014 not chosen.\n\nStill the best answer for long-tail SEO. The ranked framing and a real paragraph per provider are worth stealing for the /provider and /model pages, where there is room to breathe."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  }
+}

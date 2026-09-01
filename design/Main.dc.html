@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@300;400;500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #f0b429; text-decoration: none; }
+    a:hover { color: #ffd36b; }
+    .row { box-shadow: inset 0 0 0 0 transparent; transition: background 0.12s ease; }
+    .row:hover { background: #0c0c0c; }
+    .row:hover .base { color: #b8b5ae; }
+    .row:hover .copy { opacity: 1; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; background: #000; color: #ededed; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 56px; height: 60px; border-bottom: 1px solid #1c1c1c;">
+    <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; letter-spacing: -0.01em;">it's free<span style="color: #f0b429;">*</span><span style="color: #6f6c66;">.ai</span></div>
+    <div style="display: flex; gap: 26px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; color: #8b8880;">
+      <a href="#">providers</a>
+      <a href="#">models</a>
+      <a href="#">local</a>
+      <a href="#">compare</a>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 400px; gap: 64px; padding: 64px 56px 46px; align-items: start; border-bottom: 1px solid #1c1c1c;">
+
+    <div>
+      <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: #f0b429; margin-bottom: 22px;">Directory &middot; verified 27 Aug 2026</div>
+      <h1 style="margin: 0 0 20px; font-size: 56px; line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; max-width: 15ch; text-wrap: balance;">Every free way to run an AI model.</h1>
+      <p style="margin: 0; max-width: 54ch; font-size: 17px; line-height: 1.55; color: #9b9891;">Rate limits, context windows and base URLs for 31 providers with a real free tier &mdash; plus the runtimes that need no provider at all. Checked every day.</p>
+
+      <div style="display: flex; align-items: center; gap: 26px; margin-top: 34px; padding-top: 22px; border-top: 1px solid #1c1c1c;">
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 19px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">450</span>
+          <span style="font-size: 12px; color: #6f6c66;">free models</span>
+        </div>
+        <span style="width: 1px; height: 14px; background: #232323;"></span>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 19px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">31</span>
+          <span style="font-size: 12px; color: #6f6c66;">providers</span>
+        </div>
+        <span style="width: 1px; height: 14px; background: #232323;"></span>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 19px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">18</span>
+          <span style="font-size: 12px; color: #6f6c66;">need no card</span>
+        </div>
+        <span style="width: 1px; height: 14px; background: #232323;"></span>
+        <div style="display: flex; align-items: baseline; gap: 7px;">
+          <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 19px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">9</span>
+          <span style="font-size: 12px; color: #6f6c66;">local runtimes</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="border: 1px solid #232323; border-radius: 12px; background: #0a0a0a; overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 9px; padding: 12px 16px; border-bottom: 1px solid #1a1a1a;">
+        <span style="width: 6px; height: 6px; border-radius: 999px; background: {{ accent }};"></span>
+        <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #6f6c66;">Start with</span>
+        <span style="margin-left: auto; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; color: #4a4844;">{{ pickIndex }}/{{ pickTotal }}</span>
+      </div>
+
+      <div style="padding: 20px 18px 18px;">
+        <div style="display: flex; align-items: center; gap: 11px; margin-bottom: 14px;">
+          <span style="{{ current.tileStyle }}"><img src="{{ current.icon }}" alt="{{ current.name }}" style="width: 100%; height: 100%; object-fit: contain;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 17px; font-weight: 500; letter-spacing: -0.02em;">{{ current.name }}</span>
+            <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; color: #6f6c66;">{{ current.tag }}</span>
+          </div>
+        </div>
+
+        <p style="margin: 0 0 18px; min-height: 66px; font-size: 14px; line-height: 1.55; color: #9b9891;">{{ current.why }}</p>
+
+        <div style="display: flex; align-items: stretch; border: 1px solid #1f1f1f; border-radius: 8px; overflow: hidden; margin-bottom: 16px;">
+          <div style="flex: 1; padding: 10px 13px; border-right: 1px solid #1f1f1f;">
+            <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 15px; color: {{ accent }}; font-variant-numeric: tabular-nums;">{{ current.stat }}</div>
+            <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a4844; margin-top: 3px;">{{ current.statLabel }}</div>
+          </div>
+          <div style="flex: 1; padding: 10px 13px;">
+            <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 15px; color: #ededed;">{{ current.ctx }}</div>
+            <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #4a4844; margin-top: 3px;">context</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <a href="#" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 9px; border-radius: 7px; background: #ededed; color: #000; font-size: 13px; font-weight: 500;">
+            {{ current.cta }}
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M9 7h8v8"></path></svg>
+          </a>
+          <div style="display: flex; gap: 5px;">
+            <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="5">
+              <span onClick="{{ dot.pick }}" style="{{ dot.style }}"></span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="height: 2px; background: #161616;">
+        <div style="{{ progressStyle }}"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px; margin: 30px 56px 20px; padding: 12px 16px; border: 1px solid #1f1f1f; border-radius: 8px; background: #0a0a0a;">
+    <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; color: {{ accent }};">~/free-llm</span>
+    <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; color: #3d3b37;">$</span>
+    <span style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; color: #6f6c66;">filter</span>
+    <span style="width: 7px; height: 15px; background: {{ accent }};"></span>
+    <div style="display: flex; gap: 6px; margin-left: 14px;">
+      <a href="#" style="padding: 4px 11px; border-radius: 999px; background: #ededed; color: #000; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px;">all 48</a>
+      <a href="#" style="padding: 4px 11px; border-radius: 999px; border: 1px solid #232323; color: #9b9891; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px;">no card</a>
+      <a href="#" style="padding: 4px 11px; border-radius: 999px; border: 1px solid #232323; color: #9b9891; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px;">no sign-up</a>
+      <a href="#" style="padding: 4px 11px; border-radius: 999px; border: 1px solid #232323; color: #9b9891; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px;">openai-compatible</a>
+      <a href="#" style="padding: 4px 11px; border-radius: 999px; border: 1px solid #232323; color: #9b9891; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px;">runs locally</a>
+    </div>
+    <span style="margin-left: auto; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; color: #4a4844;">48 results</span>
+  </div>
+
+  <table style="width: calc(100% - 112px); margin: 0 56px 22px; border-collapse: collapse; font-size: 14px;">
+    <thead>
+      <tr style="border-bottom: 1px solid #2a2a2a;">
+        <th style="text-align: left; padding: 10px 12px 10px 0; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6c66; font-weight: 400;">Provider</th>
+        <th style="text-align: left; padding: 10px 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6c66; font-weight: 400;">Free tier</th>
+        <th style="text-align: right; padding: 10px 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6c66; font-weight: 400;">Context</th>
+        <th style="text-align: right; padding: 10px 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6c66; font-weight: 400;">Models</th>
+        <th style="text-align: left; padding: 10px 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6c66; font-weight: 400;">Signup</th>
+        <th style="text-align: left; padding: 10px 0 10px 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #6f6c66; font-weight: 400;">Base URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <sc-for list="{{ rows }}" as="row" hint-placeholder-count="9">
+        <tr class="row" style="border-bottom: 1px solid #161616;">
+          <td style="padding: 12px 12px 12px 0;">
+            <span style="display: flex; align-items: center; gap: 10px;">
+              <span style="{{ row.tileStyle }}"><img src="{{ row.icon }}" alt="{{ row.name }}" style="width: 100%; height: 100%; object-fit: contain;"></span>
+              <span style="font-weight: 500;">{{ row.name }}</span>
+              <span style="{{ row.badgeStyle }}">{{ row.badge }}</span>
+            </span>
+          </td>
+          <td style="padding: 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; color: #ededed;">{{ row.quota }}</td>
+          <td style="padding: 12px; text-align: right; font-family: 'Geist Mono', ui-monospace, monospace; color: #9b9891;">{{ row.ctx }}</td>
+          <td style="padding: 12px; text-align: right; font-family: 'Geist Mono', ui-monospace, monospace; color: #9b9891;">{{ row.models }}</td>
+          <td style="padding: 12px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; color: {{ row.gateColor }};">{{ row.gate }}</td>
+          <td style="padding: 12px 0 12px 12px;">
+            <span style="display: flex; align-items: center; gap: 8px;">
+              <span class="base" style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12.5px; color: #6f6c66; transition: color 0.12s ease;">{{ row.base }}</span>
+              <span class="copy" style="opacity: 0; padding: 2px 7px; border: 1px solid #2a2a2a; border-radius: 4px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10px; color: #8b8880; transition: opacity 0.12s ease;">copy</span>
+            </span>
+          </td>
+        </tr>
+      </sc-for>
+    </tbody>
+  </table>
+
+  <div style="padding: 0 56px 56px;">
+    <a href="#" style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px;">all 48 resources, sorted by free ceiling &rarr;</a>
+  </div>
+
+
+  <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 30px 56px 16px; border-top: 1px solid #1c1c1c;">
+    <div>
+      <h2 style="margin: 0 0 5px; font-size: 21px; font-weight: 500; letter-spacing: -0.03em;">Run it on your own machine</h2>
+      <p style="margin: 0; font-size: 13.5px; color: #6f6c66;">No quota, no key, no request leaving the laptop. Nine runtimes, all free forever.</p>
+    </div>
+    <a href="#" style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px;">compare hardware &rarr;</a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 8px 56px 44px;">
+    <sc-for list="{{ runtimes }}" as="rt" hint-placeholder-count="9">
+      <div style="display: flex; flex-direction: column; gap: 9px; padding: 15px; border: 1px solid #1f1f1f; border-radius: 10px; background: #0a0a0a;">
+        <div style="display: flex; align-items: center; gap: 9px;">
+          <span style="{{ rt.tileStyle }}"><img src="{{ rt.icon }}" alt="{{ rt.name }}" style="width: 100%; height: 100%; object-fit: contain;"></span>
+          <span style="font-size: 14.5px; font-weight: 500; letter-spacing: -0.02em;">{{ rt.name }}</span>
+          <span style="margin-left: auto; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: #6f6c66; border: 1px solid #232323; border-radius: 999px; padding: 2px 7px;">{{ rt.kind }}</span>
+        </div>
+        <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #9b9891; min-height: 39px;">{{ rt.why }}</p>
+        <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; color: #4a4844; padding-top: 8px; border-top: 1px solid #161616;">{{ rt.cmd }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; align-items: baseline; justify-content: space-between; padding: 30px 56px 16px; border-top: 1px solid #1c1c1c;">
+    <div>
+      <h2 style="margin: 0 0 5px; font-size: 21px; font-weight: 500; letter-spacing: -0.03em;">Around the models</h2>
+      <p style="margin: 0; font-size: 13.5px; color: #6f6c66;">Free AI tooling that isn&rsquo;t a model: editors, benchmarks and the things that tell you what to pick.</p>
+    </div>
+    <a href="#" style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px;">all 15 tools &rarr;</a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 44px; padding: 8px 56px 48px;">
+    <sc-for list="{{ tools }}" as="tool" hint-placeholder-count="10">
+      <a href="#" style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #161616; color: inherit;">
+        <span style="{{ tool.tileStyle }}"><img src="{{ tool.icon }}" alt="{{ tool.name }}" style="width: 100%; height: 100%; object-fit: contain;"></span>
+        <span style="width: 148px; flex: none; font-size: 14px; font-weight: 500; letter-spacing: -0.02em;">{{ tool.name }}</span>
+        <span style="flex: 1; font-size: 13px; color: #9b9891; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ tool.why }}</span>
+        <span style="flex: none; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: #6f6c66;">{{ tool.kind }}</span>
+      </a>
+    </sc-for>
+  </div>
+
+  <div style="padding: 34px 56px 12px; border-top: 1px solid #1c1c1c;">
+    <h2 style="margin: 0 0 5px; font-size: 21px; font-weight: 500; letter-spacing: -0.03em;">Questions people actually ask</h2>
+    <p style="margin: 0; font-size: 13.5px; color: #6f6c66;">Short answers. The long ones live on each provider page.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 44px; padding: 14px 56px 48px;">
+    <sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="6">
+      <div style="padding: 18px 0; border-bottom: 1px solid #161616;">
+        <h3 style="margin: 0 0 8px; font-size: 14.5px; font-weight: 500; letter-spacing: -0.015em;">{{ faq.q }}</h3>
+        <p style="margin: 0; font-size: 13.5px; line-height: 1.6; color: #9b9891;">{{ faq.a }}</p>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="border-top: 1px solid #1c1c1c; background: #070707;">
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px; padding: 42px 56px 44px;">
+      <sc-for list="{{ linkGroups }}" as="group" hint-placeholder-count="4">
+        <div>
+          <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #4a4844; margin-bottom: 15px;">{{ group.title }}</div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <sc-for list="{{ group.links }}" as="link" hint-placeholder-count="7">
+              <a href="#" style="font-size: 13px; color: #9b9891;">{{ link }}</a>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid #1c1c1c; background: #050505;">
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 64px; padding: 48px 56px 36px; align-items: start;">
+      <div style="max-width: 42ch;">
+        <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 22px; letter-spacing: -0.02em; margin-bottom: 14px;">it's free<span style="color: {{ accent }};">*</span><span style="color: #6f6c66;">.ai</span></div>
+        <p style="margin: 0 0 20px; font-size: 13.5px; line-height: 1.6; color: #6f6c66;">An open directory of every way to use an AI model without paying for it. Limits are re-checked daily against each provider&rsquo;s own docs, and every entry links straight to the source.</p>
+        <div style="display: flex; align-items: center; gap: 9px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; color: #4a4844;">
+          <span style="width: 6px; height: 6px; border-radius: 999px; background: #3f7d54;"></span>
+          Last verified 27 Aug 2026
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 56px;">
+        <div>
+          <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #4a4844; margin-bottom: 14px;">Browse</div>
+          <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+            <a href="#" style="color: #9b9891;">All providers</a>
+            <a href="#" style="color: #9b9891;">All models</a>
+            <a href="#" style="color: #9b9891;">Local runtimes</a>
+            <a href="#" style="color: #9b9891;">Tools</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: #4a4844; margin-bottom: 14px;">Project</div>
+          <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px;">
+            <a href="#" style="color: #9b9891;">Suggest a provider</a>
+            <a href="#" style="color: #9b9891;">Report a wrong limit</a>
+            <a href="#" style="color: #9b9891;">Source on GitHub</a>
+            <a href="#" style="color: #9b9891;">itsfree.dev</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px 56px 40px; margin: 0 56px; border-top: 1px solid #131313; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; color: #3d3b37;">
+      <span>Free tiers change without warning &mdash; check the limits before you depend on one.</span>
+      <span>Built by <a href="#" style="color: #6f6c66;">@midudev</a></span>
+    </div>
+  </div>
+
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#f0b429","options":["#f0b429","#7dd3a0","#8ab4ff","#ededed"]},"rotateSeconds":{"editor":"range","default":5,"min":2,"max":12,"step":1,"unit":"s"}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { pick: 0, elapsed: 0 };
+  }
+
+  componentDidMount() {
+    // Steps the hero recommendation and fills its progress bar
+    this.timer = setInterval(() => {
+      const span = (this.props.rotateSeconds ?? 5) * 1000;
+      const next = this.state.elapsed + 100;
+      if (next >= span) {
+        this.setState({ elapsed: 0, pick: (this.state.pick + 1) % this.picks().length });
+      } else {
+        this.setState({ elapsed: next });
+      }
+    }, 100);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  // `light` marks a pale logo, which needs a dark tile instead of a white one
+  picks() {
+    return [
+      {
+        name: 'Groq', icon: 'groq.png', tag: 'api.groq.com', light: false,
+        why: 'The highest free ceiling that asks for nothing but an email — and the fastest tokens per second anyone gives away.',
+        stat: '14,400', statLabel: 'requests / day', ctx: '262K', cta: 'Get a key'
+      },
+      {
+        name: 'Google AI Studio', icon: 'gemini.png', tag: 'aistudio.google.com', light: false,
+        why: 'A million tokens of context on the free tier, and it reads images, audio and video as happily as text.',
+        stat: '1,500', statLabel: 'requests / day', ctx: '1M', cta: 'Get a key'
+      },
+      {
+        name: 'NVIDIA NIM', icon: 'nvidia.png', tag: 'build.nvidia.com', light: false,
+        why: 'The widest free catalogue on the list: 126 open models, GLM and DeepSeek included. Phone number, no card.',
+        stat: '126', statLabel: 'free models', ctx: '1M', cta: 'Get a key'
+      },
+      {
+        name: 'Ollama', icon: 'ollama.png', tag: 'localhost:11434', light: true,
+        why: 'No quota to run out of and no request leaving the laptop. One command and the model is yours.',
+        stat: 'unlimited', statLabel: 'no rate limit', ctx: 'your RAM', cta: 'Download'
+      },
+      {
+        name: 'Cerebras', icon: 'cerebras.png', tag: 'cloud.cerebras.ai', light: false,
+        why: 'Wafer-scale silicon running GPT-OSS at thousands of tokens a second. Slow to allow, absurdly fast to answer.',
+        stat: '1M', statLabel: 'tokens / day', ctx: '131K', cta: 'Get a key'
+      }
+    ];
+  }
+
+  tile(light, size) {
+    return [
+      'display: grid',
+      'place-items: center',
+      'flex: none',
+      'width: ' + size + 'px',
+      'height: ' + size + 'px',
+      'padding: ' + Math.round(size * 0.14) + 'px',
+      'border-radius: ' + Math.round(size * 0.26) + 'px',
+      'overflow: hidden',
+      light ? 'background: #141414' : 'background: #fff',
+      light ? 'box-shadow: inset 0 0 0 1px #2a2a2a' : 'box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08)'
+    ].join('; ');
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#f0b429';
+    const span = (this.props.rotateSeconds ?? 5) * 1000;
+    const picks = this.picks();
+    const pick = this.state.pick % picks.length;
+    const current = picks[pick];
+
+    const dots = picks.map((entry, index) => ({
+      pick: () => this.setState({ pick: index, elapsed: 0 }),
+      style: [
+        'width: 6px',
+        'height: 6px',
+        'border-radius: 999px',
+        'cursor: pointer',
+        'transition: background 0.2s ease',
+        index === pick ? 'background: ' + accent : 'background: #2e2e2e'
+      ].join('; ')
+    }));
+
+    const table = [
+      { name: 'Groq', icon: 'groq.png', light: false, badge: 'fastest', quota: '14,400 / day', ctx: '262K', models: '12', gate: 'email', base: 'api.groq.com/openai/v1' },
+      { name: 'Google AI Studio', icon: 'gemini.png', light: false, badge: '', quota: '1,500 / day', ctx: '1M', models: '17', gate: 'email', base: 'generativelanguage.googleapis.com' },
+      { name: 'NVIDIA NIM', icon: 'nvidia.png', light: false, badge: 'widest', quota: '40 / min', ctx: '1M', models: '126', gate: 'phone', base: 'integrate.api.nvidia.com/v1' },
+      { name: 'OpenRouter', icon: 'openrouter.png', light: false, badge: '', quota: '28 models at $0', ctx: '1M', models: '28', gate: 'email', base: 'openrouter.ai/api/v1' },
+      { name: 'Cerebras', icon: 'cerebras.png', light: false, badge: '', quota: '1M tokens / day', ctx: '131K', models: '8', gate: 'email', base: 'api.cerebras.ai/v1' },
+      { name: 'Cloudflare Workers AI', icon: 'cloudflare.png', light: false, badge: '', quota: '10K neurons / day', ctx: '10M', models: '40', gate: 'email', base: 'api.cloudflare.com/client/v4' },
+      { name: 'Cohere', icon: 'cohere.png', light: true, badge: '', quota: '1,000 / month', ctx: '436K', models: '12', gate: 'email', base: 'api.cohere.com/compatibility/v1' },
+      { name: 'LLM7.io', icon: 'llm7.png', light: false, badge: '', quota: '30 / min', ctx: '1M', models: '16', gate: 'none', base: 'api.llm7.io/v1' },
+      { name: 'Ollama', icon: 'ollama.png', light: true, badge: 'local', quota: 'unlimited', ctx: 'your RAM', models: '100+', gate: 'none', base: 'localhost:11434/v1' }
+    ];
+
+
+    const runtimeData = [
+      { name: 'Ollama', icon: 'ollama.png', light: true, kind: 'CLI', why: 'One command and the model is running. The default answer for most people.', cmd: 'ollama run llama3.3' },
+      { name: 'LM Studio', icon: 'lmstudio.png', light: false, kind: 'Desktop', why: 'Ollama with a window: browse, download and chat without touching a terminal.', cmd: 'localhost:1234/v1' },
+      { name: 'llama.cpp', icon: 'llamacpp.svg', light: false, kind: 'Engine', why: 'The C++ engine almost every other runtime on this list is built on.', cmd: 'llama-server -hf ...' },
+      { name: 'vLLM', icon: 'vllm.png', light: false, kind: 'Server', why: 'What production serving runs on. Continuous batching, real throughput.', cmd: 'vllm serve Qwen/Qwen3-8B' },
+      { name: 'MLX', icon: 'mlx.svg', light: false, kind: 'Apple', why: 'Apple silicon only, and on an M-series Mac nothing else comes close.', cmd: 'mlx_lm.server --model ...' },
+      { name: 'Jan', icon: 'jan.png', light: true, kind: 'Desktop', why: 'An open source ChatGPT that works with the wifi switched off.', cmd: 'localhost:1337/v1' },
+      { name: 'llamafile', icon: 'llamafileicon.svg', light: false, kind: 'Binary', why: 'Model and runtime in a single file. Download, chmod +x, run.', cmd: './model.llamafile' },
+      { name: 'GPT4All', icon: 'gpt4all.png', light: false, kind: 'Desktop', why: 'Chats with your own documents, on a laptop with no GPU at all.', cmd: 'no GPU required' },
+      { name: 'KoboldCpp', icon: 'koboldcpp.svg', light: false, kind: 'Binary', why: 'One executable around llama.cpp, tuned for long-form writing.', cmd: 'koboldcpp model.gguf' }
+    ];
+
+    const toolData = [
+      { name: 'Can I Run AI', icon: 'canirunai.svg', light: false, kind: 'utility', why: 'Scans your machine and scores every model you could actually run' },
+      { name: 'isbetter.ai', icon: 'isbetter.svg', light: false, kind: 'compare', why: 'One prompt to every model at once — answer, code, speed and cost side by side' },
+      { name: 'LMArena', icon: 'lmarena.svg', light: false, kind: 'benchmark', why: 'Blind head-to-head voting; the least gameable ranking there is' },
+      { name: 'Artificial Analysis', icon: 'artificialanalysis.png', light: false, kind: 'benchmark', why: 'Independent numbers on quality, speed and price per provider' },
+      { name: 'OpenCode', icon: 'opencode.png', light: false, kind: 'agent', why: 'Coding agent in the terminal — point it at any free key on this page' },
+      { name: 'Cline', icon: 'cline.png', light: false, kind: 'agent', why: 'Autonomous agent inside VS Code, bring your own free API key' },
+      { name: 'Kilo Code', icon: 'kilocode.svg', light: false, kind: 'agent', why: 'A Cline fork that ships with free models already wired up' },
+      { name: 'Continue', icon: 'continue.png', light: true, kind: 'editor', why: 'Autocomplete and chat in your editor, pointed at your local model' },
+      { name: 'Aider', icon: 'aider.png', light: false, kind: 'agent', why: 'Pair programming in the terminal, with git commits written for you' },
+      { name: 'Google Colab', icon: 'colab.png', light: false, kind: 'compute', why: 'A free T4 in the browser for fine-tuning and one-off experiments' },
+      { name: 'awesome-freellm-apis', icon: 'awesome.svg', light: false, kind: 'dataset', why: 'The community table this directory checks itself against every day' }
+    ];
+
+    const faqs = [
+      {
+        q: 'Is there a free AI API that needs no credit card?',
+        a: 'Eighteen of them. Groq gives the most room — 14,400 requests a day on an email address — and LLM7.io needs no account at all. NVIDIA NIM asks for a phone number but never a card.'
+      },
+      {
+        q: 'Which free tier has the highest limits?',
+        a: 'By requests, Groq at 14,400 a day. By tokens, Cerebras at a million a day. By context, Cloudflare Workers AI at 10M. There is no single winner, which is why the table sorts.'
+      },
+      {
+        q: 'Can I ship something to production on a free tier?',
+        a: 'Rarely. Most of these are evaluation tiers with no uptime promise, and several forbid production outright. Prototype on them, then price the paid tier before you launch.'
+      },
+      {
+        q: 'What does OpenAI-compatible actually mean?',
+        a: 'The provider accepts the same request shape as the OpenAI SDK, so you swap two lines — the base URL and the key — and the rest of your code is unchanged. Almost everything here is.'
+      },
+      {
+        q: 'Do I need a GPU to run a model locally?',
+        a: 'No. llama.cpp and GPT4All run 7B models on a normal laptop CPU, and any recent Mac runs them well through MLX. A GPU buys speed, not access.'
+      },
+      {
+        q: 'Do free providers train on what I send them?',
+        a: 'Some do — Google says so plainly for the free Gemini tier. Assume free means your prompts are fair game unless the provider states otherwise, and keep anything confidential local.'
+      }
+    ];
+
+    const linkGroups = [
+      {
+        title: 'By model',
+        links: ['Llama 3.3 70B for free', 'DeepSeek R1 for free', 'Qwen 3 for free', 'GPT-OSS 120B for free', 'Gemini 3 Flash for free', 'Kimi K2 for free', 'GLM 5 for free']
+      },
+      {
+        title: 'By provider',
+        links: ['Groq free tier', 'Google AI Studio free tier', 'NVIDIA NIM free tier', 'OpenRouter free models', 'Cerebras free tier', 'Cloudflare Workers AI', 'Mistral free tier']
+      },
+      {
+        title: 'By need',
+        links: ['Free APIs with no credit card', 'Free APIs with no sign-up', 'Longest free context windows', 'Fastest free inference', 'Free vision models', 'Free coding models', 'Free embeddings']
+      },
+      {
+        title: 'Guides',
+        links: ['Free models in Claude Code', 'Free models in Cursor', 'Free models in VS Code', 'Run a model on 8GB of RAM', 'Swap providers without rewriting', 'Staying inside a free quota']
+      }
+    ];
+
+    const rows = table.map((row) => ({
+      ...row,
+      tileStyle: this.tile(row.light, 22),
+      gateColor: row.gate === 'none' ? accent : '#9b9891',
+      badgeStyle: row.badge
+        ? 'padding: 2px 7px; border-radius: 999px; border: 1px solid #2a2a2a; font-family: Geist Mono, monospace; font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: #8b8880'
+        : 'display: none'
+    }));
+
+    return {
+      accent,
+      rows,
+      dots,
+      faqs,
+      linkGroups,
+      runtimes: runtimeData.map((rt) => ({ ...rt, tileStyle: this.tile(rt.light, 24) })),
+      tools: toolData.map((tool) => ({ ...tool, tileStyle: this.tile(tool.light, 22) })),
+      current: { ...current, tileStyle: this.tile(current.light, 38) },
+      pickIndex: String(pick + 1).padStart(2, '0'),
+      pickTotal: String(picks.length).padStart(2, '0'),
+      progressStyle: 'height: 2px; width: ' + Math.round((this.state.elapsed / span) * 100) + '%; background: ' + accent + '; transition: width 0.1s linear'
+    };
+  }
+}
+</script>
+</body>
+</html>

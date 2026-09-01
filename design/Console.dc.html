@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@300;400;500&display=swap">
+  <style>
+    body { margin: 0; }
+    a { color: #f0b429; text-decoration: none; }
+    a:hover { color: #ffd36b; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; background: #000; color: #e8e6e1; font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace; -webkit-font-smoothing: antialiased;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 56px; border-bottom: 1px solid #1c1c1c;">
+    <div style="font-size: 13px;">it's free<span style="color: #f0b429;">*</span><span style="color: #6f6c66;">.ai</span></div>
+    <div style="display: flex; gap: 24px; font-size: 12px; color: #6f6c66;">
+      <a href="#">providers</a>
+      <a href="#">models</a>
+      <a href="#">local</a>
+    </div>
+  </div>
+
+  <div style="padding: 72px 48px 40px;">
+    <h1 style="margin: 0 0 20px; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; font-size: 58px; line-height: 1; letter-spacing: -0.045em; font-weight: 500; max-width: 18ch;">Pick a provider.<br>Copy the config.<br><span style="color: #f0b429;">Ship.</span></h1>
+    <p style="margin: 0; max-width: 58ch; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; font-size: 16.5px; line-height: 1.5; color: #9b9891;">Every free LLM endpoint, with the base URL, the env var and a working snippet already filled in. No docs tab, no scavenger hunt.</p>
+  </div>
+
+  <div style="margin: 0 48px 32px; border: 1px solid #232323; border-radius: 4px; overflow: hidden;">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid #1c1c1c; background: #0a0a0a;">
+      <span style="color: #f0b429; font-size: 13px;">~/free-llm</span>
+      <span style="color: #3d3b37; font-size: 13px;">$</span>
+      <span style="font-size: 13px; color: #e8e6e1;">{{ query }}</span>
+      <span style="width: 8px; height: 16px; background: #f0b429; display: inline-block;"></span>
+      <span style="margin-left: auto; font-size: 11px; color: #4a4844;">{{ count }} results</span>
+    </div>
+
+    <sc-for list="{{ rows }}" as="row" hint-placeholder-count="5">
+      <div onClick="{{ row.pick }}" style="{{ row.rowStyle }}">
+        <span style="width: 200px; flex: none; font-size: 13.5px; color: {{ row.nameColor }};">{{ row.name }}</span>
+        <span style="width: 150px; flex: none; font-size: 13px; color: #9b9891; font-variant-numeric: tabular-nums;">{{ row.quota }}</span>
+        <span style="width: 78px; flex: none; font-size: 13px; color: #6f6c66; text-align: right;">{{ row.ctx }}</span>
+        <span style="width: 92px; flex: none; font-size: 12px; color: {{ row.gateColor }}; text-align: right;">{{ row.gate }}</span>
+        <span style="flex: 1; font-size: 12.5px; color: #4a4844; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ row.base }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="margin: 0 48px 20px; display: flex; align-items: center; gap: 10px;">
+    <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #4a4844;">Ready to paste</span>
+    <span style="flex: 1; height: 1px; background: #1c1c1c;"></span>
+    <span style="font-size: 11px; color: #4a4844;">{{ selectedName }}</span>
+  </div>
+
+  <div style="margin: 0 48px 48px; border: 1px solid #232323; border-radius: 4px; background: #0a0a0a;">
+    <div style="display: flex; gap: 4px; padding: 10px 14px; border-bottom: 1px solid #1c1c1c;">
+      <span style="padding: 4px 11px; border-radius: 3px; background: #e8e6e1; color: #000; font-size: 11.5px;">TypeScript</span>
+      <span style="padding: 4px 11px; border-radius: 3px; color: #6f6c66; font-size: 11.5px;">Python</span>
+      <span style="padding: 4px 11px; border-radius: 3px; color: #6f6c66; font-size: 11.5px;">curl</span>
+      <span style="margin-left: auto; padding: 4px 11px; border: 1px solid #232323; border-radius: 3px; color: #6f6c66; font-size: 11.5px;">copy</span>
+    </div>
+    <pre style="margin: 0; padding: 20px 22px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 13px; line-height: 1.75; color: #b8b5ae; white-space: pre; overflow-x: auto;">{{ snippet }}</pre>
+  </div>
+
+  <div style="display: flex; gap: 48px; padding: 0 48px 52px;">
+    <div style="flex: 1;">
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #4a4844; margin-bottom: 12px;">Also works in</div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <span style="padding: 5px 11px; border: 1px solid #232323; border-radius: 999px; font-size: 12px; color: #9b9891;">Claude Code</span>
+        <span style="padding: 5px 11px; border: 1px solid #232323; border-radius: 999px; font-size: 12px; color: #9b9891;">Cursor</span>
+        <span style="padding: 5px 11px; border: 1px solid #232323; border-radius: 999px; font-size: 12px; color: #9b9891;">Codex CLI</span>
+        <span style="padding: 5px 11px; border: 1px solid #232323; border-radius: 999px; font-size: 12px; color: #9b9891;">Aider</span>
+        <span style="padding: 5px 11px; border: 1px solid #232323; border-radius: 999px; font-size: 12px; color: #9b9891;">Cline</span>
+        <span style="padding: 5px 11px; border: 1px solid #232323; border-radius: 999px; font-size: 12px; color: #9b9891;">OpenCode</span>
+      </div>
+    </div>
+    <div style="flex: 1;">
+      <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #4a4844; margin-bottom: 12px;">Keys</div>
+      <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; color: #6f6c66;">
+        <span><span style="color: #e8e6e1;">/</span> &nbsp;filter providers</span>
+        <span><span style="color: #e8e6e1;">↑↓</span> &nbsp;move through results</span>
+        <span><span style="color: #e8e6e1;">⏎</span> &nbsp;copy the config</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top: 1px solid #1c1c1c; padding: 24px 48px 36px; display: flex; justify-content: space-between; font-size: 11.5px; color: #4a4844;">
+    <span>Limits verified 27 Aug 2026</span>
+    <span>itsfree.ai</span>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#f0b429","options":["#f0b429","#7dd3a0","#8ab4ff","#e8e6e1"]}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { picked: 'groq' };
+  }
+
+  data() {
+    return [
+      { id: 'groq', name: 'groq', quota: '14,400 / day', ctx: '262K', gate: 'email', base: 'api.groq.com/openai/v1', env: 'GROQ_API_KEY', model: 'moonshotai/kimi-k2-instruct' },
+      { id: 'gemini', name: 'google-ai-studio', quota: '1,500 / day', ctx: '1M', gate: 'email', base: 'generativelanguage.googleapis.com/v1beta/openai', env: 'GEMINI_API_KEY', model: 'gemini-3.6-flash' },
+      { id: 'nvidia', name: 'nvidia-nim', quota: '40 / min', ctx: '1M', gate: 'phone', base: 'integrate.api.nvidia.com/v1', env: 'NVIDIA_API_KEY', model: 'z-ai/glm-5.2' },
+      { id: 'cerebras', name: 'cerebras', quota: '1M tokens / day', ctx: '131K', gate: 'email', base: 'api.cerebras.ai/v1', env: 'CEREBRAS_API_KEY', model: 'gpt-oss-120b' },
+      { id: 'llm7', name: 'llm7.io', quota: '30 / min', ctx: '1M', gate: 'none', base: 'api.llm7.io/v1', env: 'LLM7_API_KEY', model: 'deepseek-r1-0528' },
+      { id: 'ollama', name: 'ollama (local)', quota: 'unlimited', ctx: 'your RAM', gate: 'none', base: 'localhost:11434/v1', env: 'none', model: 'llama3.3' }
+    ];
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#f0b429';
+    const all = this.data();
+    const picked = this.state.picked;
+    const selected = all.find((row) => row.id === picked) ?? all[0];
+
+    const rows = all.map((row) => {
+      const on = row.id === picked;
+      return {
+        ...row,
+        pick: () => this.setState({ picked: row.id }),
+        nameColor: on ? accent : '#e8e6e1',
+        gateColor: row.gate === 'none' ? accent : '#6f6c66',
+        rowStyle: [
+          'display: flex',
+          'align-items: center',
+          'gap: 20px',
+          'padding: 13px 18px',
+          'cursor: pointer',
+          'border-bottom: 1px solid #131313',
+          on ? 'background: #0f0d09' : 'background: transparent',
+          on ? 'box-shadow: inset 2px 0 0 ' + accent : 'box-shadow: none'
+        ].join('; ')
+      };
+    });
+
+    const snippet = [
+      "import OpenAI from 'openai'",
+      '',
+      'const client = new OpenAI({',
+      "  baseURL: 'https://" + selected.base + "',",
+      '  apiKey: process.env.' + selected.env,
+      '})',
+      '',
+      'const res = await client.chat.completions.create({',
+      "  model: '" + selected.model + "',",
+      "  messages: [{ role: 'user', content: 'Hello' }]",
+      '})'
+    ].join('\n');
+
+    return {
+      rows,
+      snippet,
+      query: 'no-card',
+      count: all.length,
+      selectedName: selected.name
+    };
+  }
+}
+</script>
+</body>
+</html>
