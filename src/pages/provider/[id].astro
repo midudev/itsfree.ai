@@ -11,7 +11,7 @@ import { modelsOf, VENDORS } from '../../data/models';
 import { snippetsFor, envLine, isLocal } from '../../data/snippets';
 import { PROVIDER_ABOUT } from '../../data/provider-about';
 import { vercelDark } from '../../styles/code-theme';
-import { SITE, breadcrumbSchema } from '../../lib/seo';
+import { SITE, breadcrumbSchema, fitDescription } from '../../lib/seo';
 
 export function getStaticPaths() {
 	return RESOURCES.filter((resource) => PROVIDERS[resource.id]).map((resource) => ({
@@ -39,7 +39,19 @@ const facts = [
 ].filter(Boolean) as { label: string; value: string }[];
 
 const title = `${resource.name} free tier — limits, API key and code`;
-const description = about[0];
+const description = fitDescription(
+	[
+		`${resource.name} free tier: ${resource.quota}.`,
+		resource.description,
+		provider.maxContext ? `Up to ${provider.maxContext} of context.` : ''
+	]
+		.filter(Boolean)
+		.join(' '),
+	{
+		title,
+		extra: 'Limits, a key and copy-paste examples you can use today.'
+	}
+);
 
 const schemas = [
 	breadcrumbSchema([

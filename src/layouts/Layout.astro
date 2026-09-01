@@ -1,6 +1,19 @@
 ---
 import '../styles/global.css';
-import { AUTHOR, SITE, SITE_NAME, canonicalUrl } from '../lib/seo';
+import {
+	AUTHOR,
+	OG_IMAGE_HEIGHT,
+	OG_IMAGE_TYPE,
+	OG_IMAGE_WIDTH,
+	SITE,
+	SITE_NAME,
+	canonicalUrl,
+	fitDescription,
+	fitTitle,
+	ogImageUrl,
+	shareImage,
+	shareImageAlt
+} from '../lib/seo';
 
 interface Props {
 	title?: string;
@@ -12,6 +25,9 @@ interface Props {
 	/** Path of the next page in a series, if any */
 	prev?: string;
 	next?: string;
+	/** Override the share card. Defaults to the PNG for this route. */
+	image?: string;
+	imageAlt?: string;
 }
 
 const {
@@ -21,11 +37,20 @@ const {
 	schemas = [],
 	noindex = false,
 	prev,
-	next
+	next,
+	image,
+	imageAlt
 } = Astro.props;
 
+const pageTitle = fitTitle(title);
+const pageDescription = fitDescription(description, {
+	title: pageTitle,
+	extra: 'Rate limits, context windows and base URLs, checked against each provider.'
+});
 const canonical = canonicalUrl(Astro.url.pathname);
-const ogImage = new URL('/og.png', SITE).href;
+const imagePath = image ?? shareImage(Astro.url.pathname);
+const ogImage = ogImageUrl(imagePath);
+const ogAlt = imageAlt ?? shareImageAlt(pageTitle, Astro.url.pathname);
 
 const siteSchema = {
 	'@context': 'https://schema.org',
@@ -52,8 +77,8 @@ const siteSchema = {
 		<meta name="generator" content={Astro.generator} />
 		<meta name="theme-color" content="#000000" />
 
-		<title>{title}</title>
-		<meta name="description" content={description} />
+		<title>{pageTitle}</title>
+		<meta name="description" content={pageDescription} />
 		{!noindex && <link rel="canonical" href={canonical} />}
 		<meta
 			name="robots"
@@ -65,26 +90,32 @@ const siteSchema = {
 		{next && <link rel="next" href={canonicalUrl(next)} />}
 
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content={SITE_NAME} />
 		<meta property="og:locale" content="en_US" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={pageDescription} />
 		<meta property="og:url" content={canonical} />
 		<meta property="og:image" content={ogImage} />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content="it's free* — every free way to run an AI model" />
+		<meta property="og:image:secure_url" content={ogImage} />
+		<meta property="og:image:type" content={OG_IMAGE_TYPE} />
+		<meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+		<meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
+		<meta property="og:image:alt" content={ogAlt} />
 
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:site" content={AUTHOR} />
 		<meta name="twitter:creator" content={AUTHOR} />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={pageDescription} />
 		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image:alt" content={ogAlt} />
 
 		<link
 			rel="preload"

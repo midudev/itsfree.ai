@@ -11,7 +11,9 @@
 		"preview": "astro preview",
 		"astro": "astro",
 		"icons": "python3 scripts/fetch-favicons.py",
-		"fonts": "python3 scripts/build-fonts.py"
+		"fonts": "python3 scripts/build-fonts.py",
+		"og": "python3 scripts/build-og-image.py",
+		"favicons": "python3 scripts/build-favicons.py"
 	},
 	"dependencies": {
 		"@astrojs/sitemap": "^3.7.3",
