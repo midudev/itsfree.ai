@@ -1,0 +1,209 @@
+---
+import { LINK_GROUPS } from '../data/links';
+import { LAST_VERIFIED } from '../data/providers';
+
+interface Props {
+	/** The link mesh only earns its place on pages with room for it */
+	mesh?: boolean;
+}
+
+const { mesh = false } = Astro.props;
+---
+
+{
+	mesh && (
+		<nav class="mesh" aria-label="Browse by model, provider and need">
+			<div class="wrap mesh-inner">
+				{LINK_GROUPS.map((group) => (
+					<div>
+						<h2>{group.title}</h2>
+						<ul>
+							{group.links.map((link) => (
+								<li>
+									<a href={link.href}>{link.label}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))}
+			</div>
+		</nav>
+	)
+}
+
+<footer class="foot">
+	<div class="wrap foot-inner">
+		<div class="about">
+			<p class="brand">it's free<span class="star">*</span><span class="dot">.ai</span></p>
+			<p class="blurb">
+				An open directory of every way to use an AI model without paying for it. Limits are re-checked
+				against each provider's own docs, and every entry links straight to the source.
+			</p>
+			<p class="verified"><span class="pip"></span>Last verified {LAST_VERIFIED}</p>
+		</div>
+
+		<div class="columns">
+			<div>
+				<h2>Browse</h2>
+				<ul>
+					<li><a href="/?cat=api">All providers</a></li>
+					<li><a href="/models/">All models</a></li>
+					<li><a href="/?cat=local">Local runtimes</a></li>
+					<li><a href="/?cat=tool">Tools</a></li>
+				</ul>
+			</div>
+			<div>
+				<h2>Project</h2>
+				<ul>
+					<li>
+						<a href="https://itsfree.dev" target="_blank" rel="noopener noreferrer">itsfree.dev</a>
+					</li>
+					<li>
+						<a href="https://x.com/midudev" target="_blank" rel="noopener noreferrer">@midudev</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrap">
+		<div class="bar">
+			<p>
+				<span class="star">*</span> Free tiers change without warning — check the limits before you depend
+				on one.
+			</p>
+			<p>Built by <a href="https://x.com/midudev" target="_blank" rel="noopener noreferrer">@midudev</a></p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.mesh {
+		border-top: 1px solid var(--border);
+		background: #070707;
+	}
+
+	.mesh-inner {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 36px;
+		padding-block: 42px 44px;
+	}
+
+	.mesh h2,
+	.columns h2 {
+		margin: 0 0 15px;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--fg-dim);
+		font-weight: 400;
+	}
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.mesh a,
+	.columns a {
+		font-size: 13px;
+		color: var(--fg-muted);
+	}
+
+	.mesh a:hover,
+	.columns a:hover {
+		color: var(--fg);
+	}
+
+	.foot {
+		border-top: 1px solid var(--border);
+		background: #050505;
+	}
+
+	.foot-inner {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 48px;
+		justify-content: space-between;
+		padding-block: 48px 36px;
+	}
+
+	.about {
+		max-width: 44ch;
+	}
+
+	.brand {
+		margin: 0 0 14px;
+		font-family: var(--font-mono);
+		font-size: 22px;
+		letter-spacing: -0.02em;
+	}
+
+	.star {
+		color: var(--star);
+	}
+
+	.dot {
+		color: var(--fg-faint);
+	}
+
+	.blurb {
+		margin: 0 0 20px;
+		font-size: 13.5px;
+		line-height: 1.6;
+		color: var(--fg-faint);
+	}
+
+	.verified {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-dim);
+	}
+
+	.pip {
+		width: 6px;
+		height: 6px;
+		border-radius: 999px;
+		background: #3f7d54;
+	}
+
+	.columns {
+		display: flex;
+		gap: 56px;
+	}
+
+	.bar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		align-items: center;
+		justify-content: space-between;
+		padding-block: 20px 40px;
+		border-top: 1px solid #131313;
+		font-family: var(--font-mono);
+		font-size: 11.5px;
+		color: var(--fg-dim);
+	}
+
+	.bar p {
+		margin: 0;
+	}
+
+	.bar a {
+		color: var(--fg-faint);
+	}
+
+	.bar a:hover {
+		color: var(--fg);
+	}
+</style>

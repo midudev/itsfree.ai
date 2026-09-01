@@ -1,0 +1,358 @@
+---
+import type { Resource } from '../data/resources';
+import { modelsOf } from '../data/models';
+import { PROVIDERS } from '../data/providers';
+import Favicon from './Favicon.astro';
+import PickBadge from './PickBadge.astro';
+
+interface Props {
+	resource: Resource;
+	/** Hide a model chip on that model's own page */
+	omitModel?: string;
+}
+
+const { resource, omitModel } = Astro.props;
+const models = modelsOf(resource.models).filter((model) => model.slug !== omitModel);
+// The right-hand slot of the quota bar: context size is the most useful second number
+// Right-hand slot of the quota bar: what the runtime is, or the headline limit
+const detail =
+	resource.kind ??
+	resource.limits?.find((limit) => /context/i.test(limit)) ??
+	resource.limits?.[0] ??
+	null;
+// Providers with a setup page get an internal link; everything else goes straight out
+const href = PROVIDERS[resource.id] ? `/provider/${resource.id}/` : resource.url;
+const external = href === resource.url;
+const badges = [
+	resource.noSignup ? 'No sign-up' : null,
+	resource.noCard ? 'No card' : null,
+	resource.openaiCompatible ? 'OpenAI compatible' : null
+].filter(Boolean) as string[];
+---
+
+<article
+	class="card"
+	data-resource
+	data-id={resource.id}
+	data-category={resource.category}
+	data-no-card={String(resource.noCard)}
+	data-no-signup={String(Boolean(resource.noSignup))}
+	data-openai={String(Boolean(resource.openaiCompatible))}
+	data-pick={String(Boolean(resource.pick))}
+	data-search={[
+		resource.name,
+		resource.description,
+		resource.quota,
+		...models.map((model) => `${model.name} ${model.apiId ?? ''}`),
+		...(resource.limits ?? [])
+	]
+		.join(' ')
+		.toLowerCase()}
+>
+	<header class="head">
+		<Favicon id={resource.id} size={34} alt={resource.name} />
+		<h3 class="name">
+			<a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
+				{resource.name}
+				<span class="stretch" />
+			</a>
+		</h3>
+		{resource.pick && <PickBadge />}
+		{
+			external ? (
+				<span class="arrow" aria-hidden="true">
+					↗
+				</span>
+			) : (
+				<a
+					class="out"
+					href={resource.url}
+					target="_blank"
+					rel="noopener noreferrer"
+					title={`Open ${resource.name}`}
+					aria-label={`Open ${resource.name}`}
+				>
+					↗
+				</a>
+			)
+		}
+	</header>
+
+	<p class="desc">{resource.description}</p>
+
+	<p class="quota">
+		<span class="quota-value">{resource.quota}</span>
+		{detail && <span class="quota-detail">{detail}</span>}
+	</p>
+
+	<div class="models">
+		{
+			models.slice(0, 3).map((model) => (
+				<a class="chip" href={`/model/${model.slug}/`}>
+					<Favicon id={model.vendor} kind="vendors" size={14} />
+					<span>{model.name}</span>
+				</a>
+			))
+		}
+		{models.length > 3 && <span class="chip more">+{models.length - 3}</span>}
+	</div>
+
+	<footer class="foot">
+		<ul class="badges">
+			{badges.map((badge) => <li>{badge}</li>)}
+		</ul>
+		<button class="share" type="button" data-share={resource.id} title={`Share ${resource.name}`}>
+			<span class="share-label">share</span>
+		</button>
+	</footer>
+</article>
+
+<style>
+	.card {
+		position: relative;
+		display: grid;
+		/* Fixed rows keep every card aligned no matter how long the copy is */
+		grid-template-rows: auto auto auto auto 1fr;
+		gap: 12px;
+		padding: 16px;
+		background: var(--bg-raised);
+		border: 1px solid var(--border);
+		border-radius: 14px;
+		text-align: left;
+		transition:
+			border-color 0.15s ease,
+			background 0.15s ease,
+			transform 0.15s ease;
+	}
+
+	.card:hover {
+		border-color: var(--border-strong);
+		background: var(--bg-hover);
+		transform: translateY(-2px);
+	}
+
+	/* Picks get a warm corner glow and a matching hairline, nothing louder */
+	.card[data-pick='true'] {
+		border-color: color-mix(in srgb, var(--star) 22%, var(--border));
+		background:
+			radial-gradient(
+				120px 80px at 100% 0%,
+				color-mix(in srgb, var(--star) 12%, transparent),
+				transparent 70%
+			),
+			var(--bg-raised);
+	}
+
+	.card[data-pick='true']:hover {
+		border-color: color-mix(in srgb, var(--star) 42%, var(--border));
+	}
+
+	.head {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 34px;
+	}
+
+	.name {
+		margin: 0;
+		flex: 1;
+		min-width: 0;
+		font-size: 15px;
+		font-weight: 550;
+		letter-spacing: -0.02em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* The link covers the whole card; interactive controls sit above it */
+	.stretch {
+		position: absolute;
+		inset: 0;
+	}
+
+	.arrow {
+		flex: none;
+		color: var(--fg-faint);
+		font-size: 12px;
+		transition:
+			transform 0.15s ease,
+			color 0.15s ease;
+	}
+
+	.card:hover .arrow {
+		transform: translate(1px, -1px);
+		color: var(--fg);
+	}
+
+	.out {
+		position: relative;
+		z-index: 1;
+		flex: none;
+		display: grid;
+		place-items: center;
+		width: 22px;
+		height: 22px;
+		border-radius: 6px;
+		color: var(--fg-faint);
+		font-size: 12px;
+		transition:
+			color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.out:hover {
+		color: var(--fg);
+		background: var(--bg-subtle);
+	}
+
+
+
+	.desc {
+		margin: 0;
+		color: var(--fg-muted);
+		font-size: 13.5px;
+		line-height: 1.5;
+		/* Two lines for everyone, so the rows below line up across the grid */
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		min-height: calc(2 * 1.5 * 13.5px);
+	}
+
+	.quota {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin: 0;
+		padding: 8px 10px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--bg-subtle);
+	}
+
+	.quota-value {
+		flex: 1;
+		min-width: 0;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--fg);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.quota-detail {
+		flex: none;
+		max-width: 50%;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-faint);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.models {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 5px;
+		/* Reserved height so cards without models keep the same rhythm */
+		min-height: 22px;
+		align-content: flex-start;
+	}
+
+	.chip {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		height: 22px;
+		padding: 0 8px 0 4px;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		line-height: 1;
+		color: var(--fg-muted);
+		transition:
+			color 0.12s ease,
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	a.chip:hover {
+		color: var(--fg);
+		border-color: var(--border-strong);
+		background: var(--bg-subtle);
+	}
+
+	.more {
+		padding-inline: 8px;
+		color: var(--fg-faint);
+	}
+
+	.foot {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 8px;
+		padding-top: 10px;
+		border-top: 1px solid var(--border);
+	}
+
+	.badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.badges li {
+		font-size: 11px;
+		color: var(--fg-muted);
+	}
+
+	.badges li + li::before {
+		content: '·';
+		margin-right: 6px;
+		color: var(--fg-faint);
+	}
+
+	.share {
+		position: relative;
+		z-index: 1;
+		flex: none;
+		background: none;
+		border: 1px solid transparent;
+		border-radius: 6px;
+		padding: 3px 7px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-faint);
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.15s ease;
+	}
+
+	.card:hover .share,
+	.share:focus-visible {
+		opacity: 1;
+	}
+
+	.share:hover {
+		color: var(--fg);
+		border-color: var(--border-strong);
+	}
+
+	@media (hover: none) {
+		.share {
+			opacity: 1;
+		}
+	}
+</style>

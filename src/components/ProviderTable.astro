@@ -1,0 +1,307 @@
+---
+import Favicon from './Favicon.astro';
+import PickBadge from './PickBadge.astro';
+import { searchIndex, type Resource } from '../data/resources';
+import { modelsOf } from '../data/models';
+import { PROVIDERS, REQUIREMENT_SHORT } from '../data/providers';
+
+interface Props {
+	resources: Resource[];
+}
+
+const { resources } = Astro.props;
+
+const rows = resources.map((resource) => {
+	const provider = PROVIDERS[resource.id];
+	return {
+		resource,
+		provider,
+		models: modelsOf(resource.models),
+		signup: REQUIREMENT_SHORT[provider.requirement],
+		free: provider.requirement === 'none'
+	};
+});
+---
+
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">Provider</th>
+			<th scope="col">Free tier</th>
+			<th scope="col" class="right">Context</th>
+			<th scope="col" class="right">Models</th>
+			<th scope="col">Signup</th>
+			<th scope="col">Includes</th>
+		</tr>
+	</thead>
+	<tbody>
+		{
+			rows.map(({ resource, provider, models, signup, free }) => (
+				<tr
+					class="row"
+					data-resource
+					data-id={resource.id}
+					data-category={resource.category}
+					data-no-card={String(resource.noCard)}
+					data-no-signup={String(Boolean(resource.noSignup))}
+					data-openai={String(Boolean(resource.openaiCompatible))}
+					data-pick={String(Boolean(resource.pick))}
+					data-search={searchIndex(resource)}
+				>
+					<th scope="row" class="ident">
+						<a href={`/provider/${resource.id}/`}>
+							<Favicon id={resource.id} size={22} alt={resource.name} />
+							<span class="name">{resource.name}</span>
+						</a>
+						{resource.pick && <PickBadge size={20} />}
+					</th>
+					<td class="mono strong">{resource.quota}</td>
+					<td class="mono right muted">{provider.maxContext ?? '—'}</td>
+					<td class="mono right muted">{provider.freeModels ?? '—'}</td>
+					<td class:list={['mono', 'small', { free }]}>{signup}</td>
+					<td class="includes">
+						<div class="chips" data-chips>
+							{models.map((model) => (
+								<a class="chip" href={`/model/${model.slug}/`} data-name={model.name}>
+									<Favicon id={model.vendor} kind="vendors" size={14} />
+									<span>{model.name}</span>
+								</a>
+							))}
+							<span class="more" data-more hidden>…</span>
+						</div>
+					</td>
+				</tr>
+			))
+		}
+	</tbody>
+</table>
+
+<script>
+	/**
+	 * Shows as many model chips as the column can hold on one line and marks the
+	 * rest with an ellipsis, whose title names what was dropped.
+	 */
+	function fit(container: HTMLElement) {
+		const chips = [...container.querySelectorAll<HTMLElement>('.chip')];
+		const more = container.querySelector<HTMLElement>('[data-more]');
+		if (!more) return;
+
+		for (const chip of chips) chip.hidden = false;
+		more.hidden = true;
+		if (container.scrollWidth <= container.clientWidth) return;
+
+		more.hidden = false;
+		const dropped: string[] = [];
+		for (let index = chips.length - 1; index >= 0; index--) {
+			if (container.scrollWidth <= container.clientWidth) break;
+			chips[index].hidden = true;
+			dropped.unshift(chips[index].dataset.name ?? '');
+		}
+
+		more.title = dropped.length ? `Also ${dropped.join(', ')}` : '';
+	}
+
+	const containers = [...document.querySelectorAll<HTMLElement>('[data-chips]')];
+	const refit = () => containers.forEach(fit);
+
+	refit();
+	// The column width moves with the viewport, and with fonts finishing loading
+	new ResizeObserver(refit).observe(document.body);
+	document.fonts?.ready.then(refit);
+
+	for (const row of document.querySelectorAll<HTMLElement>('.table .row')) {
+		row.addEventListener('click', (event) => {
+			// Real links, and anyone mid-selection, keep their own behaviour
+			if ((event.target as HTMLElement).closest('a')) return;
+			if (window.getSelection()?.toString()) return;
+
+			const link = row.querySelector<HTMLAnchorElement>('.ident a');
+			if (!link) return;
+
+			if (event.metaKey || event.ctrlKey) window.open(link.href, '_blank', 'noopener');
+			else location.assign(link.href);
+		});
+	}
+</script>
+
+<style>
+	.table {
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: collapse;
+		font-size: 14px;
+	}
+
+	thead tr {
+		border-bottom: 1px solid var(--border-strong);
+	}
+
+	th {
+		font-weight: 400;
+		text-align: left;
+	}
+
+	thead th {
+		padding: 10px 12px;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--fg-faint);
+		white-space: nowrap;
+	}
+
+	/* Fixed layout: the chips column takes whatever the rest does not need */
+	thead th:nth-child(1) {
+		width: 19%;
+	}
+
+	thead th:nth-child(2) {
+		width: 21%;
+	}
+
+	thead th:nth-child(3),
+	thead th:nth-child(4) {
+		width: 7%;
+	}
+
+	thead th:nth-child(5) {
+		width: 7%;
+	}
+
+	thead th:first-child,
+	.ident {
+		padding-left: 0;
+	}
+
+	thead th:last-child,
+	.includes {
+		padding-right: 0;
+	}
+
+	.right {
+		text-align: right;
+	}
+
+	.row {
+		border-bottom: 1px solid #161616;
+		cursor: pointer;
+		transition: background 0.12s ease;
+	}
+
+	.row:hover {
+		background: var(--bg-hover);
+	}
+
+	/* The whole row is the target, so the name lights up wherever you point */
+	.row:hover .name {
+		color: var(--star);
+	}
+
+	td,
+	tbody th {
+		padding: 12px;
+	}
+
+	.ident {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.ident a {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-width: 0;
+	}
+
+	.name {
+		font-weight: 550;
+		letter-spacing: -0.02em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.mono {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.strong {
+		color: var(--fg);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.muted {
+		color: var(--fg-muted);
+	}
+
+	.small {
+		font-size: 12.5px;
+		color: var(--fg-muted);
+	}
+
+	.free {
+		color: var(--star);
+	}
+
+	.chips {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		flex: none;
+		height: 22px;
+		padding: 0 8px 0 4px;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		line-height: 1;
+		color: var(--fg-muted);
+		transition:
+			color 0.12s ease,
+			border-color 0.12s ease,
+			background 0.12s ease;
+	}
+
+	.chip:hover {
+		color: var(--fg);
+		border-color: var(--border-strong);
+		background: var(--bg-hover);
+	}
+
+	.more {
+		flex: none;
+		padding-inline: 4px;
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--fg-faint);
+		cursor: default;
+	}
+
+	@media (max-width: 1000px) {
+		thead th:nth-child(3),
+		td:nth-child(3) {
+			display: none;
+		}
+	}
+
+	@media (max-width: 820px) {
+		thead th:last-child,
+		.includes {
+			display: none;
+		}
+	}
+</style>

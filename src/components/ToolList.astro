@@ -1,0 +1,109 @@
+---
+import Favicon from './Favicon.astro';
+import { CATEGORIES, searchIndex, type Resource } from '../data/resources';
+
+interface Props {
+	resources: Resource[];
+}
+
+const { resources } = Astro.props;
+
+const KIND: Record<string, string> = {
+	coding: 'agent',
+	chat: 'playground',
+	tool: 'utility'
+};
+
+/** Falls back to the category label for anything the map misses */
+function kindOf(resource: Resource): string {
+	return (
+		KIND[resource.category] ??
+		CATEGORIES.find((category) => category.id === resource.category)?.label ??
+		''
+	);
+}
+---
+
+<div class="list">
+	{
+		resources.map((resource) => (
+			<a
+				class="item"
+				href={resource.url}
+				target="_blank"
+				rel="noopener noreferrer"
+				data-resource
+				data-id={resource.id}
+				data-category={resource.category}
+				data-no-card={String(resource.noCard)}
+				data-no-signup={String(Boolean(resource.noSignup))}
+				data-openai={String(Boolean(resource.openaiCompatible))}
+				data-pick={String(Boolean(resource.pick))}
+				data-search={searchIndex(resource)}
+			>
+				<Favicon id={resource.id} size={22} alt={resource.name} />
+				<span class="name">{resource.name}</span>
+				<span class="why">{resource.description}</span>
+				<span class="kind">{kindOf(resource)}</span>
+			</a>
+		))
+	}
+</div>
+
+<style>
+	.list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+		gap: 0 44px;
+	}
+
+	.item {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 13px 0;
+		border-bottom: 1px solid #161616;
+	}
+
+	.item:hover .name {
+		color: var(--star);
+	}
+
+	.name {
+		width: 152px;
+		flex: none;
+		font-size: 14px;
+		font-weight: 550;
+		letter-spacing: -0.02em;
+		transition: color 0.12s ease;
+	}
+
+	.why {
+		flex: 1;
+		min-width: 0;
+		font-size: 13px;
+		color: var(--fg-muted);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.kind {
+		flex: none;
+		font-family: var(--font-mono);
+		font-size: 10px;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--fg-faint);
+	}
+
+	@media (max-width: 640px) {
+		.name {
+			width: auto;
+		}
+
+		.why {
+			display: none;
+		}
+	}
+</style>

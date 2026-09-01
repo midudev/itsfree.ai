@@ -1,0 +1,66 @@
+---
+interface Props {
+	value: string;
+	label: string;
+	/** Sits in the top-right corner of a code block instead of inline */
+	floating?: boolean;
+}
+
+const { value, label, floating = false } = Astro.props;
+---
+
+<button
+	class:list={['copy', { floating }]}
+	type="button"
+	data-copy={value}
+	title={label}
+	aria-label={label}
+>
+	<span class="copy-label">copy</span>
+</button>
+
+<style>
+	.copy {
+		flex: none;
+		background: var(--bg-subtle);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 3px 8px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--fg-faint);
+		cursor: pointer;
+		transition:
+			color 0.12s ease,
+			border-color 0.12s ease;
+	}
+
+	.copy:hover {
+		color: var(--fg);
+		border-color: var(--border-strong);
+	}
+
+
+	.floating {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: color-mix(in srgb, var(--bg-subtle) 80%, transparent);
+	}
+</style>
+
+<script>
+	document.addEventListener('click', async (event) => {
+		const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-copy]');
+		if (!button) return;
+
+		const label = button.querySelector<HTMLElement>('.copy-label')!;
+		try {
+			await navigator.clipboard.writeText(button.dataset.copy!);
+			label.textContent = 'copied';
+		} catch {
+			label.textContent = 'failed';
+		}
+		setTimeout(() => (label.textContent = 'copy'), 1400);
+	});
+</script>

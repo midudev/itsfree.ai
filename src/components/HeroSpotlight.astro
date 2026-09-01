@@ -1,0 +1,297 @@
+---
+import Favicon from './Favicon.astro';
+import { HIGHLIGHTS } from '../data/highlights';
+
+const total = String(HIGHLIGHTS.length).padStart(2, '0');
+---
+
+<aside class="spotlight" data-spotlight aria-label="Recommended free providers">
+	<header class="head">
+		<span class="pip"></span>
+		<span class="label">Start with</span>
+		<span class="counter" data-counter>01/{total}</span>
+	</header>
+
+	{
+		HIGHLIGHTS.map((highlight, index) => (
+			<article class="slide" data-slide={index} hidden={index !== 0}>
+				<div class="ident">
+					<Favicon id={highlight.id} size={38} alt={highlight.name} />
+					<div>
+						<p class="name">{highlight.name}</p>
+						<p class="host">{highlight.host}</p>
+					</div>
+				</div>
+
+				<p class="why">{highlight.why}</p>
+
+				<dl class="figures">
+					<div>
+						<dd class="stat">{highlight.stat}</dd>
+						<dt>{highlight.statLabel}</dt>
+					</div>
+					<div>
+						<dd>{highlight.context}</dd>
+						<dt>context</dt>
+					</div>
+				</dl>
+
+				<a class="cta" href={highlight.href}>
+					{highlight.cta}
+					<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M5 12h14"></path>
+						<path d="m13 6 6 6-6 6"></path>
+					</svg>
+				</a>
+			</article>
+		))
+	}
+
+	<div class="dots">
+		{
+			HIGHLIGHTS.map((highlight, index) => (
+				<button
+					class:list={['dot', { 'is-active': index === 0 }]}
+					type="button"
+					data-dot={index}
+					aria-label={`Show ${highlight.name}`}
+				/>
+			))
+		}
+	</div>
+
+	<div class="track"><div class="progress" data-progress></div></div>
+</aside>
+
+<script>
+	const ROTATE_MS = 6000;
+	const TICK_MS = 100;
+
+	const spotlight = document.querySelector<HTMLElement>('[data-spotlight]');
+
+	if (spotlight) {
+		const slides = [...spotlight.querySelectorAll<HTMLElement>('[data-slide]')];
+		const dots = [...spotlight.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+		const counter = spotlight.querySelector<HTMLElement>('[data-counter]')!;
+		const progress = spotlight.querySelector<HTMLElement>('[data-progress]')!;
+		const total = String(slides.length).padStart(2, '0');
+
+		let index = 0;
+		let elapsed = 0;
+		let timer: number | undefined;
+
+		function show(next: number) {
+			index = (next + slides.length) % slides.length;
+			elapsed = 0;
+			for (const [position, slide] of slides.entries()) slide.hidden = position !== index;
+			for (const [position, dot] of dots.entries()) {
+				dot.classList.toggle('is-active', position === index);
+			}
+			counter.textContent = `${String(index + 1).padStart(2, '0')}/${total}`;
+			progress.style.width = '0%';
+		}
+
+		function tick() {
+			elapsed += TICK_MS;
+			if (elapsed >= ROTATE_MS) show(index + 1);
+			else progress.style.width = `${(elapsed / ROTATE_MS) * 100}%`;
+		}
+
+		function start() {
+			stop();
+			timer = window.setInterval(tick, TICK_MS);
+		}
+
+		function stop() {
+			if (timer) window.clearInterval(timer);
+			timer = undefined;
+		}
+
+		for (const [position, dot] of dots.entries()) {
+			dot.addEventListener('click', () => {
+				show(position);
+				start();
+			});
+		}
+
+		// Rotating under the cursor is hostile when someone is reading the card
+		spotlight.addEventListener('mouseenter', stop);
+		spotlight.addEventListener('mouseleave', start);
+		spotlight.addEventListener('focusin', stop);
+		spotlight.addEventListener('focusout', start);
+
+		const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+		if (!still.matches) start();
+		still.addEventListener('change', (event) => (event.matches ? stop() : start()));
+	}
+</script>
+
+<style>
+	.spotlight {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: var(--bg-subtle);
+		overflow: hidden;
+	}
+
+	.head {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		padding: 12px 16px;
+		border-bottom: 1px solid #1a1a1a;
+	}
+
+	.pip {
+		width: 6px;
+		height: 6px;
+		border-radius: 999px;
+		background: var(--star);
+	}
+
+	.label {
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		letter-spacing: 0.09em;
+		text-transform: uppercase;
+		color: var(--fg-faint);
+	}
+
+	.counter {
+		margin-left: auto;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		color: var(--fg-dim);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.slide {
+		padding: 20px 18px 0;
+	}
+
+	.ident {
+		display: flex;
+		align-items: center;
+		gap: 11px;
+		margin-bottom: 14px;
+	}
+
+	.name {
+		margin: 0;
+		font-size: 17px;
+		font-weight: 550;
+		letter-spacing: -0.02em;
+	}
+
+	.host {
+		margin: 2px 0 0;
+		font-family: var(--font-mono);
+		font-size: 10.5px;
+		color: var(--fg-faint);
+	}
+
+	.why {
+		margin: 0 0 18px;
+		/* Holds the card's height steady as the copy changes underneath it */
+		min-height: 66px;
+		font-size: 14px;
+		line-height: 1.55;
+		color: var(--fg-muted);
+	}
+
+	.figures {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0;
+		margin: 0 0 16px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.figures div {
+		padding: 10px 13px;
+	}
+
+	.figures div + div {
+		border-left: 1px solid var(--border);
+	}
+
+	.figures dd {
+		margin: 0;
+		font-family: var(--font-mono);
+		font-size: 15px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.figures .stat {
+		color: var(--star);
+	}
+
+	.figures dt {
+		margin-top: 3px;
+		font-family: var(--font-mono);
+		font-size: 10px;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--fg-dim);
+	}
+
+	.cta {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 7px;
+		padding: 9px;
+		border-radius: 7px;
+		background: var(--fg);
+		color: var(--bg);
+		font-size: 13px;
+		font-weight: 550;
+		transition: opacity 0.12s ease;
+	}
+
+	.cta:hover {
+		opacity: 0.86;
+	}
+
+	.dots {
+		display: flex;
+		justify-content: center;
+		gap: 5px;
+		padding: 16px 0 14px;
+	}
+
+	.dot {
+		width: 6px;
+		height: 6px;
+		padding: 0;
+		border: none;
+		border-radius: 999px;
+		background: #2e2e2e;
+		cursor: pointer;
+		transition: background 0.2s ease;
+	}
+
+	.dot:hover {
+		background: var(--fg-faint);
+	}
+
+	.dot.is-active {
+		background: var(--star);
+	}
+
+	.track {
+		height: 2px;
+		background: #161616;
+	}
+
+	.progress {
+		height: 2px;
+		width: 0;
+		background: var(--star);
+		transition: width 0.1s linear;
+	}
+</style>
