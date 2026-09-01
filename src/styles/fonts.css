@@ -1,0 +1,47 @@
+/* Subset to the characters this site prints — see scripts/build-fonts.py.
+   Regenerate with `pnpm fonts`; it rewrites each unicode-range below too. */
+
+/* Geist Sans Variable */
+@font-face {
+	font-family: 'Geist Variable';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 100 900;
+	src: url('/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');
+	unicode-range: U+0020-007E, U+00A9, U+00AE, U+00B0, U+00B7, U+00C0-00C2, U+00C4,
+		U+00C7-00CB, U+00CD, U+00CF, U+00D1, U+00D3-00D4, U+00D6-00D7, U+00DA, U+00DC, U+00DF-00E2,
+		U+00E4, U+00E7-00EB, U+00ED, U+00EF, U+00F1, U+00F3-00F4, U+00F6, U+00FA, U+00FC, U+00FF,
+		U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+20AC, U+2190-2193, U+2197, U+FEFF,
+		U+FFFD;
+}
+
+/* Geist Mono Variable */
+@font-face {
+	font-family: 'Geist Mono Variable';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 100 900;
+	src: url('/fonts/geist-mono-latin-wght-normal.woff2') format('woff2-variations');
+	unicode-range: U+0020-007E, U+00A9, U+00AE, U+00B0, U+00B7, U+00C0-00C2, U+00C4,
+		U+00C7-00CB, U+00CD, U+00CF, U+00D1, U+00D3-00D4, U+00D6-00D7, U+00DA, U+00DC, U+00DF-00E2,
+		U+00E4, U+00E7-00EB, U+00ED, U+00EF, U+00F1, U+00F3-00F4, U+00F6, U+00FA, U+00FC, U+00FF,
+		U+2013-2014, U+2019, U+201C-201D, U+2022, U+2026, U+20AC, U+2190-2193, U+2197, U+FEFF,
+		U+FFFD;
+}
+
+/* Geist Pixel — tallies, stat values and provider initials */
+@font-face {
+	font-family: 'Geist Pixel';
+	font-style: normal;
+	font-display: swap;
+	font-weight: 400;
+	src: url('/fonts/geist-pixel-latin-400-normal.woff2') format('woff2');
+	unicode-range: U+0020-007E, U+00B7, U+2014, U+2019, U+201C-201D, U+2026, U+2197, U+FEFF,
+		U+FFFD;
+}
+
+:root {
+	--font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+	--font-pixel: 'Geist Pixel', var(--font-mono);
+}

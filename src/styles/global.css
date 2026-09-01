@@ -1,0 +1,83 @@
+@import './fonts.css';
+
+:root {
+	color-scheme: dark;
+
+	--bg: #000;
+	--bg-subtle: #0a0a0a;
+	--bg-raised: #0e0e0e;
+	--bg-hover: #161616;
+	--border: #1f1f1f;
+	--border-strong: #2e2e2e;
+	--fg: #ededed;
+	--fg-muted: #a1a1a1;
+	--fg-faint: #6b6b6b;
+	--fg-dim: #4a4844;
+	--accent: #fff;
+	--star: #f0b429;
+
+	--radius: 10px;
+	--radius-lg: 14px;
+	--max-width: 1120px;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Any `display` we set would otherwise beat the UA stylesheet's [hidden] rule */
+[hidden] {
+	display: none !important;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font-family: var(--font-sans);
+	font-size: 15px;
+	line-height: 1.5;
+	letter-spacing: -0.011em;
+	-webkit-font-smoothing: antialiased;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+button,
+input {
+	font: inherit;
+	color: inherit;
+}
+
+::selection {
+	background: var(--fg);
+	color: var(--bg);
+}
+
+:focus-visible {
+	outline: 2px solid var(--fg);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+.wrap {
+	width: 100%;
+	max-width: var(--max-width);
+	margin-inline: auto;
+	padding-inline: 24px;
+}
+
+@media (max-width: 640px) {
+	.wrap {
+		padding-inline: 16px;
+	}
+}

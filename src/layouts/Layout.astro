@@ -1,23 +1,121 @@
+---
+import '../styles/global.css';
+import { AUTHOR, SITE, SITE_NAME, canonicalUrl } from '../lib/seo';
+
+interface Props {
+	title?: string;
+	description?: string;
+	/** JSON-LD blocks for this page */
+	schemas?: unknown[];
+	/** Keep the page out of the index (404, thin variants). Links stay followable. */
+	noindex?: boolean;
+	/** Path of the next page in a series, if any */
+	prev?: string;
+	next?: string;
+}
+
+const {
+	title = 'Free AI APIs and models — every free tier, compared',
+	description =
+		'Every way to use an AI model for free: rate limits, context windows and base URLs for 24 providers with a real free tier, plus 9 runtimes you can run yourself.',
+	schemas = [],
+	noindex = false,
+	prev,
+	next
+} = Astro.props;
+
+const canonical = canonicalUrl(Astro.url.pathname);
+const ogImage = new URL('/og.png', SITE).href;
+
+const siteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: SITE_NAME,
+	alternateName: 'itsfree.ai',
+	url: SITE,
+	description:
+		'An open directory of every way to use an AI model without paying for it, with the limits re-checked against each provider.',
+	inLanguage: 'en',
+	potentialAction: {
+		'@type': 'SearchAction',
+		target: { '@type': 'EntryPoint', urlTemplate: `${SITE}/?q={search_term_string}` },
+		'query-input': 'required name=search_term_string'
+	}
+};
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="theme-color" content="#000000" />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		{!noindex && <link rel="canonical" href={canonical} />}
+		<meta
+			name="robots"
+			content={noindex
+				? 'noindex, follow'
+				: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+		/>
+		{prev && <link rel="prev" href={canonicalUrl(prev)} />}
+		{next && <link rel="next" href={canonicalUrl(next)} />}
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={SITE_NAME} />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="it's free* — every free way to run an AI model" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content={AUTHOR} />
+		<meta name="twitter:creator" content={AUTHOR} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<link
+			rel="preload"
+			href="/fonts/geist-latin-wght-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/geist-mono-latin-wght-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/geist-pixel-latin-400-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+
+		<script type="application/ld+json" set:html={JSON.stringify(siteSchema)} is:inline />
+		{
+			schemas.map((schema) => (
+				<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+			))
+		}
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
