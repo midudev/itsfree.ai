@@ -1,0 +1,258 @@
+{
+	"icons": {
+		"ai-studio-playground": {
+			"src": "/icons/ai-studio-playground.png",
+			"tone": "dark"
+		},
+		"ai21": {
+			"src": "/icons/ai21.png",
+			"tone": "dark"
+		},
+		"aider": {
+			"src": "/icons/aider.png",
+			"tone": "dark"
+		},
+		"alibaba": {
+			"src": "/icons/alibaba.png",
+			"tone": "dark"
+		},
+		"artificial-analysis": {
+			"src": "/icons/artificial-analysis.png",
+			"tone": "dark"
+		},
+		"awesome-freellm-apis": {
+			"src": "/icons/awesome-freellm-apis.svg",
+			"tone": "dark"
+		},
+		"can-i-run-ai": {
+			"src": "/icons/can-i-run-ai.svg",
+			"tone": "dark"
+		},
+		"cerebras": {
+			"src": "/icons/cerebras.png",
+			"tone": "dark"
+		},
+		"chutes": {
+			"src": "/icons/chutes.png",
+			"tone": "dark"
+		},
+		"cline": {
+			"src": "/icons/cline.png",
+			"tone": "dark"
+		},
+		"cloud-modelscope": {
+			"src": "/icons/cloud-modelscope.png",
+			"tone": "dark"
+		},
+		"cloudflare-workers-ai": {
+			"src": "/icons/cloudflare-workers-ai.png",
+			"tone": "dark"
+		},
+		"cohere": {
+			"src": "/icons/cohere.png",
+			"tone": "light"
+		},
+		"continue": {
+			"src": "/icons/continue.png",
+			"tone": "dark"
+		},
+		"deepseek": {
+			"src": "/icons/deepseek.svg",
+			"tone": "dark"
+		},
+		"google-ai-studio": {
+			"src": "/icons/google-ai-studio.png",
+			"tone": "dark"
+		},
+		"google-colab": {
+			"src": "/icons/google-colab.png",
+			"tone": "dark"
+		},
+		"gpt4all": {
+			"src": "/icons/gpt4all.png",
+			"tone": "dark"
+		},
+		"groq": {
+			"src": "/icons/groq.svg",
+			"tone": "dark"
+		},
+		"huggingface": {
+			"src": "/icons/huggingface.png",
+			"tone": "light"
+		},
+		"huggingface-spaces": {
+			"src": "/icons/huggingface-spaces.png",
+			"tone": "light"
+		},
+		"isbetter-ai": {
+			"src": "/icons/isbetter-ai.svg",
+			"tone": "light"
+		},
+		"jan": {
+			"src": "/icons/jan.png",
+			"tone": "light"
+		},
+		"kilo-code": {
+			"src": "/icons/kilo-code.png",
+			"tone": "dark"
+		},
+		"koboldcpp": {
+			"src": "/icons/koboldcpp.svg",
+			"tone": "dark"
+		},
+		"llama-cpp": {
+			"src": "/icons/llama-cpp.svg",
+			"tone": "dark"
+		},
+		"llamafile": {
+			"src": "/icons/llamafile.svg",
+			"tone": "dark"
+		},
+		"llm7": {
+			"src": "/icons/llm7.svg",
+			"tone": "dark"
+		},
+		"lm-studio": {
+			"src": "/icons/lm-studio.png",
+			"tone": "dark"
+		},
+		"lmarena": {
+			"src": "/icons/lmarena.svg",
+			"tone": "dark"
+		},
+		"mistral": {
+			"src": "/icons/mistral.svg",
+			"tone": "dark"
+		},
+		"mlx": {
+			"src": "/icons/mlx.svg",
+			"tone": "dark"
+		},
+		"nebius": {
+			"src": "/icons/nebius.svg",
+			"tone": "dark"
+		},
+		"nscale": {
+			"src": "/icons/nscale.png",
+			"tone": "dark"
+		},
+		"nvidia-nim": {
+			"src": "/icons/nvidia-nim.png",
+			"tone": "dark"
+		},
+		"ollama": {
+			"src": "/icons/ollama.png",
+			"tone": "light"
+		},
+		"ollama-cloud": {
+			"src": "/icons/ollama-cloud.png",
+			"tone": "light"
+		},
+		"opencode": {
+			"src": "/icons/opencode.svg",
+			"tone": "dark"
+		},
+		"opencode-zen": {
+			"src": "/icons/opencode-zen.svg",
+			"tone": "dark"
+		},
+		"openrouter": {
+			"src": "/icons/openrouter.png",
+			"tone": "light"
+		},
+		"openrouter-rankings": {
+			"src": "/icons/openrouter-rankings.png",
+			"tone": "light"
+		},
+		"ovhcloud": {
+			"src": "/icons/ovhcloud.svg",
+			"tone": "dark"
+		},
+		"sambanova": {
+			"src": "/icons/sambanova.png",
+			"tone": "dark"
+		},
+		"siliconflow": {
+			"src": "/icons/siliconflow.png",
+			"tone": "dark"
+		},
+		"tokenizer": {
+			"src": "/icons/tokenizer.png",
+			"tone": "light"
+		},
+		"vllm": {
+			"src": "/icons/vllm.png",
+			"tone": "light"
+		},
+		"xai": {
+			"src": "/icons/xai.png",
+			"tone": "light"
+		},
+		"zai": {
+			"src": "/icons/zai.png",
+			"tone": "dark"
+		}
+	},
+	"vendors": {
+		"ai21": {
+			"src": "/vendors/ai21.png",
+			"tone": "dark"
+		},
+		"alibaba": {
+			"src": "/vendors/alibaba.png",
+			"tone": "dark"
+		},
+		"cohere": {
+			"src": "/vendors/cohere.png",
+			"tone": "dark"
+		},
+		"deepseek": {
+			"src": "/vendors/deepseek.png",
+			"tone": "dark"
+		},
+		"google": {
+			"src": "/vendors/google.svg",
+			"tone": "dark"
+		},
+		"groq": {
+			"src": "/vendors/groq.svg",
+			"tone": "dark"
+		},
+		"meta": {
+			"src": "/vendors/meta.png",
+			"tone": "light"
+		},
+		"microsoft": {
+			"src": "/vendors/microsoft.png",
+			"tone": "dark"
+		},
+		"mistral": {
+			"src": "/vendors/mistral.svg",
+			"tone": "dark"
+		},
+		"moonshot": {
+			"src": "/vendors/moonshot.png",
+			"tone": "dark"
+		},
+		"nvidia": {
+			"src": "/vendors/nvidia.png",
+			"tone": "dark"
+		},
+		"openai": {
+			"src": "/vendors/openai.png",
+			"tone": "dark"
+		},
+		"poolside": {
+			"src": "/vendors/poolside.svg",
+			"tone": "light"
+		},
+		"xai": {
+			"src": "/vendors/xai.png",
+			"tone": "light"
+		},
+		"zai": {
+			"src": "/vendors/zai.svg",
+			"tone": "dark"
+		}
+	}
+}
