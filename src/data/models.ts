@@ -95,7 +95,7 @@ export const MODELS: Model[] = [
 		vendor: 'openai',
 		apiId: 'gpt-oss-120b',
 		description:
-			'OpenAI’s open-weights release. Runs on your own hardware, or free on Groq. Cerebras still serves it on a $5 trial.',
+			'OpenAI’s open-weights release. Runs on your own hardware, or free on Groq. Cerebras still serves it on a $5 signup credit.',
 		context: '131K',
 		openWeights: true,
 		tags: ['open weights', 'reasoning']
@@ -110,6 +110,17 @@ export const MODELS: Model[] = [
 		context: '131K',
 		openWeights: true,
 		tags: ['open weights', 'fast', 'reasoning']
+	},
+	{
+		slug: 'gpt-oss-safeguard',
+		name: 'GPT-OSS Safeguard 20B',
+		vendor: 'openai',
+		apiId: 'openai/gpt-oss-safeguard-20b',
+		description:
+			'The safety classifier in the GPT-OSS line. Groq serves it on the same free chat quota as the other 20B.',
+		context: '131K',
+		openWeights: true,
+		tags: ['open weights', 'safety']
 	},
 	{
 		slug: 'llama-3-3-70b',
@@ -238,6 +249,30 @@ export const MODELS: Model[] = [
 		tags: ['long context', 'multilingual']
 	},
 	{
+		slug: 'qwen-3-30b-a3b',
+		name: 'Qwen 3 30B-A3B',
+		vendor: 'alibaba',
+		apiId: 'Qwen/Qwen3-30B-A3B',
+		family: 'qwen3',
+		description:
+			'The 30B MoE (3B active). Cloudflare serves @cf/qwen/qwen3-30b-a3b-fp8 on the free Workers AI pool.',
+		context: '128K',
+		openWeights: true,
+		tags: ['open weights', 'moe']
+	},
+	{
+		slug: 'qwen-3-5-397b',
+		name: 'Qwen 3.5 397B',
+		vendor: 'alibaba',
+		apiId: 'qwen3.5:397b',
+		family: 'qwen3',
+		description:
+			'The 397B-A17B Qwen 3.5. Ollama Cloud’s current Qwen id is qwen3.5:397b.',
+		context: '256K',
+		openWeights: true,
+		tags: ['open weights', 'moe', 'long context']
+	},
+	{
 		slug: 'qwen-3-8b',
 		name: 'Qwen 3 8B',
 		vendor: 'alibaba',
@@ -299,7 +334,7 @@ export const MODELS: Model[] = [
 		vendor: 'google',
 		apiId: 'gemma-4-31b',
 		description:
-			'Google’s open 31B. Cerebras serves gemma-4-31b on the $5 trial; Requesty lists google/gemma-4-31b-it at $0.',
+			'Google’s open 31B. Cerebras serves gemma-4-31b on a $5 signup credit; Requesty lists google/gemma-4-31b-it at $0.',
 		context: '262K',
 		openWeights: true,
 		tags: ['open weights', 'multimodal']
@@ -398,6 +433,17 @@ export const MODELS: Model[] = [
 		apiId: 'groq/compound',
 		description:
 			'Not one model but a system: Groq routes your request across models and built-in tools like web search.',
+		context: '131K',
+		openWeights: false,
+		tags: ['agents', 'tools', 'fast']
+	},
+	{
+		slug: 'groq-compound-mini',
+		name: 'Groq Compound Mini',
+		vendor: 'groq',
+		apiId: 'groq/compound-mini',
+		description:
+			'The lighter Compound system on Groq. Same tool-routing idea, smaller default stack.',
 		context: '131K',
 		openWeights: false,
 		tags: ['agents', 'tools', 'fast']
