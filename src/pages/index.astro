@@ -13,7 +13,15 @@ import { itemListSchema } from '../lib/seo';
 
 const providers = resourcesOf('access').filter((resource) => PROVIDERS[resource.id]);
 const runtimes = resourcesOf('local');
-const tools = resourcesOf('toolbox');
+const PINNED_TOOLS = ['isbetter-ai', 'can-i-run-ai']
+const tools = [...resourcesOf('toolbox')].sort((a, b) => {
+	const left = PINNED_TOOLS.indexOf(a.id)
+	const right = PINNED_TOOLS.indexOf(b.id)
+	if (left === -1 && right === -1) return 0
+	if (left === -1) return 1
+	if (right === -1) return -1
+	return left - right
+})
 
 const total = RESOURCES.length;
 const freeModels = providers.reduce(

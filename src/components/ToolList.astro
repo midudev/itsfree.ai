@@ -1,5 +1,6 @@
 ---
 import Favicon from './Favicon.astro';
+import PickBadge from './PickBadge.astro';
 import { CATEGORIES, searchIndex, type Resource } from '../data/resources';
 
 interface Props {
@@ -43,6 +44,7 @@ function kindOf(resource: Resource): string {
 			>
 				<Favicon id={resource.id} size={22} alt={resource.name} />
 				<span class="name">{resource.name}</span>
+				{resource.pick && <PickBadge size={18} />}
 				<span class="why">{resource.description}</span>
 				<span class="kind">{kindOf(resource)}</span>
 			</a>
@@ -67,6 +69,15 @@ function kindOf(resource: Resource): string {
 
 	.item:hover .name {
 		color: var(--star);
+	}
+
+	.item[data-pick='true'] {
+		background:
+			radial-gradient(
+				80px 40px at 0% 50%,
+				color-mix(in srgb, var(--star) 10%, transparent),
+				transparent 70%
+			);
 	}
 
 	.name {
