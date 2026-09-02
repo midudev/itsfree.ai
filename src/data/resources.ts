@@ -142,16 +142,17 @@ export const RESOURCES: Resource[] = [
 		pick: true
 	},
 	{
-		id: 'inference-net',
-		name: 'Inference.net',
-		url: 'https://inference.net/dashboard/api-keys',
-		description: 'OpenAI-compatible serverless catalog. Free plan, 30 requests a minute, no card.',
+		id: 'vercel-ai-gateway',
+		name: 'Vercel AI Gateway',
+		url: 'https://vercel.com/ai-gateway',
+		description: 'One key, hundreds of models, $5 of credits every month. No markup on tokens.',
 		category: 'api',
-		quota: '30 requests per minute',
-		limits: ['1M context', '58 models', 'Credits on the free plan'],
-		models: ['glm-5', 'deepseek-v4-flash', 'llama-3-3-70b', 'nemotron-3-super'],
+		quota: '$5 of credits per month',
+		limits: ['Free-tier model subset', '1M context', 'Per-model rate limits'],
+		models: ['gpt-oss-120b', 'qwen-3-8-flash-next', 'gemma-4-31b', 'glm-5', 'nemotron-3-super'],
 		noCard: true,
-		openaiCompatible: true
+		openaiCompatible: true,
+		pick: true
 	},
 	{
 		id: 'amd-radeon',
@@ -605,18 +606,6 @@ export const RESOURCES: Resource[] = [
 		openaiCompatible: true
 	},
 	{
-		id: 'xai',
-		name: 'xAI',
-		url: 'https://console.x.ai',
-		description: 'Grok from the source. Prepaid credits, up to 1M of context on Grok 4.3.',
-		category: 'api',
-		quota: 'Prepaid credits',
-		limits: ['1M context', 'No standing free list', 'Live data from X'],
-		models: ['grok-4'],
-		noCard: true,
-		openaiCompatible: true
-	},
-	{
 		id: 'opencode-zen',
 		name: 'OpenCode Zen',
 		url: 'https://opencode.ai/auth',
@@ -653,18 +642,6 @@ export const RESOURCES: Resource[] = [
 		openaiCompatible: true
 	},
 	{
-		id: 'chutes',
-		name: 'Chutes.ai',
-		url: 'https://chutes.ai/',
-		description: 'Decentralised TEE inference. The live catalogue is paid — no standing free slice.',
-		category: 'api',
-		quota: 'Paid per token',
-		limits: ['1M context', '14 TEE models', 'No free tier'],
-		models: ['deepseek-v4-flash'],
-		noCard: true,
-		openaiCompatible: true
-	},
-	{
 		id: 'nebius',
 		name: 'Nebius AI Studio',
 		url: 'https://studio.nebius.com/settings/api-keys',
@@ -696,18 +673,6 @@ export const RESOURCES: Resource[] = [
 		category: 'tool',
 		quota: 'Free, keys stay in your browser',
 		limits: ['Side-by-side runs', 'Local models too', 'Cost per answer'],
-		noCard: true,
-		noSignup: true,
-		pick: true
-	},
-	{
-		id: 'awesome-freellm-apis',
-		name: 'awesome-freellm-apis',
-		url: 'https://github.com/open-free-llm-api/awesome-freellm-apis',
-		description: 'The repo keeping a live table of free providers and their limits.',
-		category: 'tool',
-		quota: 'Open source',
-		limits: ['Community maintained'],
 		noCard: true,
 		noSignup: true,
 		pick: true

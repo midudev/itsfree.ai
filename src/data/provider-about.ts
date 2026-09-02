@@ -19,10 +19,6 @@ export const PROVIDER_ABOUT: Record<string, string[]> = {
 		'OpenRouter is a router, not a lab. One key, one /api/v1 URL, and it fans the request out to whoever actually serves the model. Anything whose id ends in :free is $0 in and $0 out; the same model without the suffix bills you. The openrouter/free alias picks a free model that matches the request.',
 		'The free pool is 18 models right now — Nemotron 3 Ultra, MiniMax M3, Laguna and GLM 5.2 among them — with up to 1M of context. DeepSeek and Qwen no longer have a :free endpoint. New accounts get 20 requests a minute and 50 a day; a $10 top-up lifts the daily cap to 1,000. Set the HTTP-Referer and X-Title headers if you want to show up on their public leaderboards.'
 	],
-	'inference-net': [
-		'Inference.net is an OpenAI-compatible gateway plus a hosted serverless catalogue. One key from inference.net/dashboard/api-keys, base URL api.inference.net/v1. The live list is 58 models — GLM 5.2, DeepSeek V4, Llama 3.3 70B, Nemotron 3 Super, Kimi K3, Gemini 3.7 Flash among them — with up to 1M of context.',
-		'The free plan is 30 requests a minute, 1M Gateway requests a month if you bring your own provider key, and no card. Hosted serverless is billed per token against the credit pot on the account; when it runs out the API returns 402. Docs live at docs.inference.net. The example id they use is glm-5.2.'
-	],
 	'amd-radeon': [
 		'AMD Radeon Cloud’s Token Factory is a shared OpenAI-compatible API on AMD GPUs. Log in at developer.amd.com.cn/radeon/tokenfactory, open a Public Free Model API card, and copy the key. Base URL is developer.amd.com.cn/radeon/api/v1. The five shared ids today are DeepSeek-V4-Flash-0731, DeepSeek-V4-Flash-Vision-Exp, Qwen3.8-Flash-Next, MiniCPM-V46 and MiniCPM5-1B.',
 		'The daily API quota is $10 USD, which at current rates is about 10 million to 111 million input/output tokens, depending on the model. It resets every day. Dedicated Model APIs on the same page are not that pool — they spend account compute. DeepSeek V4 Flash still has 1M of context. No card to start.'
@@ -30,6 +26,10 @@ export const PROVIDER_ABOUT: Record<string, string[]> = {
 	requesty: [
 		'Requesty is an OpenAI-compatible gateway: one key from app.requesty.ai/api-keys, base URL router.requesty.ai/v1. The free slice is 12 models priced $0 — Nemotron 3 Ultra, Super, Nano and Lightning, Laguna XS and M, Gemma 4 31B, Leanstral 1.5, Muse Glimmer and Ling 3.0 Tiny. Super, Ultra and Lightning go to 1M of context.',
 		'New organisations get 200 requests a day and 20 a minute, shared across every free model, reset daily, no card. Paying organisations jump to 1,000 a day. The rest of the 600+ catalogue is pay-as-you-go plus 5%. EU traffic can use router.eu.requesty.ai/v1.'
+	],
+	'vercel-ai-gateway': [
+		'Vercel AI Gateway is one OpenAI-compatible URL in front of hundreds of models, at the provider’s list price with no markup. Every team gets $5 of credits a month on the Free Tier subset — GPT-OSS 120B, GPT-5.4 Mini, Gemma 4 31B, Gemini 2.5 Flash, Qwen 3.8 Flash Next, GLM 5.3 Flash, Kimi K2.7 Code, MiniMax M3, Nemotron 3 Super, Llama 4 Maverick, Grok 4.6, DeepSeek V3.2 Thinking. Email, no card. Base https://ai-gateway.vercel.sh/v1, key AI_GATEWAY_API_KEY.',
+		'The credit starts on the first request and refreshes monthly. Buy extra credits and the monthly $5 stops — you move to the paid tier. Free-tier requests are rate-limited per model (429 if you burst). Claude Opus/Sonnet 5, Gemini 3.7 and GPT-5.6 are not on that subset. The live filter is vercel.com/ai-gateway/models?freeTier=true.'
 	],
 	cerebras: [
 		'Cerebras Cloud serves models from wafer-scale chips, which is why GPT-OSS 120B comes back at thousands of tokens a second. The public catalogue is two models: gpt-oss-120b and gemma-4-31b.',
@@ -71,10 +71,6 @@ export const PROVIDER_ABOUT: Record<string, string[]> = {
 		'SambaNova Cloud runs seven models on its own RDU chips: Llama 3.3 70B, DeepSeek V3.1 and V3.2, MiniMax M2.7 and M3, Gemma 4 31B and GPT-OSS 120B. Fast when it answers; the free ceiling is tight — 20 requests a minute, 20 a day, 200K tokens a day.',
 		'Email, no card. MiniMax M3 takes the window to 1M. R1 left the catalogue in April 2026. OpenAI-compatible. Use it when you want those weights on custom silicon, not when you need volume.'
 	],
-	xai: [
-		'xAI’s API is Grok. The current flagship is grok-4.6 (500K of context); grok-4.3 still reaches 1M. grok-4-1-fast retired in May 2026. Sign-up is an email; you then load prepaid credits. There is no standing free model list.',
-		'OpenAI-compatible at api.x.ai/v1. Live data from X is the extra, when the model has it. Credits run out quietly, so watch the console before you depend on the key.'
-	],
 	'ollama-cloud': [
 		'Ollama Cloud is the same model names and client you already use locally, pointed at someone else’s GPU. ollama run gpt-oss:120b-cloud after ollama signin, or call api.ollama.com/v1 with a key.',
 		'Nineteen models on the live list, including DeepSeek V4, MiniMax M3, GLM 5.x and Kimi K3. The free slice is monthly starter credits on the starter models, one concurrent request — session and weekly caps are gone. Switching from local is a host change.'
@@ -98,10 +94,6 @@ export const PROVIDER_ABOUT: Record<string, string[]> = {
 	siliconflow: [
 		'SiliconFlow hosts Chinese open weights. The China console registers with SMS to a mainland number; identity verification then unlocks a small standing free set. DeepSeek-R1 and DeepSeek-V3 on this host are paid. Caps are per model, shown in the console, not a global 30 RPM.',
 		'OpenAI-compatible at api.siliconflow.cn/v1, 131K of context. A Chinese platform; expect the console in that language. Fine if the specific free weights are what you want.'
-	],
-	chutes: [
-		'Chutes is decentralised serverless inference on Bittensor: independent GPU operators serve open models through an OpenAI-compatible gateway at llm.chutes.ai/v1. They also run TEE-attested endpoints, so the host is not supposed to read the prompt.',
-		'The live catalogue is 14 TEE models, all priced. There is no standing free slice. DeepSeek R1 and Llama 3.3 70B are gone; the current headline weights are DeepSeek V4 Flash, Kimi K3 and GLM 5.2, billed per million tokens.'
 	],
 	ai21: [
 		'AI21 Labs is the Israeli lab behind Jamba, a hybrid Mamba-Transformer that stays cheap on long documents because it does not pay full Transformer cost on every token. 256K of context. New accounts get $10 of credits for three months.',

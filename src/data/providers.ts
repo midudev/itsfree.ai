@@ -2,8 +2,8 @@
  * Technical details for every provider that exposes an API, keyed by the
  * resource id in src/data/resources.ts. This is what powers /provider/<id>.
  *
- * Figures follow the awesome-free-llm-apis directory (freellm.net), which is
- * refreshed daily — see LAST_VERIFIED below.
+ * Figures come from each provider’s own docs and live /models lists.
+ * LAST_VERIFIED is the last full pass.
  */
 
 export const LAST_VERIFIED = '2 Sep 2026'
@@ -111,24 +111,6 @@ export const PROVIDERS: Record<string, Provider> = {
 			'Set the HTTP-Referer and X-Title headers to appear on the public leaderboards.'
 		]
 	},
-	'inference-net': {
-		baseUrl: 'https://api.inference.net/v1',
-		apiKeyUrl: 'https://inference.net/dashboard/api-keys',
-		envVar: 'INFERENCE_API_KEY',
-		exampleModel: 'glm-5.2',
-		requirement: 'email',
-		freeModels: 58,
-		maxContext: '1M',
-		rateLimit: '30 requests/minute on the free plan',
-		modalities: ['text', 'image', 'reasoning'],
-		openaiCompatible: true,
-		docsUrl: 'https://docs.inference.net/api/api-quickstart',
-		gotchas: [
-			'The 58 catalog models are serverless and billed per token against your credit balance. A 402 means the pot is empty.',
-			'The free plan’s 1M Gateway requests are for routing with your own provider key — that is not the hosted catalogue.',
-			'None of the live /v1/models ids are priced at $0. A deployment with no prices set would be free, but the public list does not have one today.'
-		]
-	},
 	'amd-radeon': {
 		baseUrl: 'https://developer.amd.com.cn/radeon/api/v1',
 		apiKeyUrl: 'https://developer.amd.com.cn/radeon/tokenfactory',
@@ -163,6 +145,24 @@ export const PROVIDERS: Record<string, Provider> = {
 			'Only the $0 ids are free. The rest of the 600+ catalogue is pay-as-you-go plus 5%.',
 			'The 200 requests/day and 20/minute caps are shared across every free model. Paying orgs get 1,000/day and 60/minute.',
 			'The docs table lists 9 free ids; live /v1/models has 12 at $0. Laguna here is 33K, not the 256K NIM window. nemotron-3.5-content-safety is a classifier.'
+		]
+	},
+	'vercel-ai-gateway': {
+		baseUrl: 'https://ai-gateway.vercel.sh/v1',
+		apiKeyUrl: 'https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai',
+		envVar: 'AI_GATEWAY_API_KEY',
+		exampleModel: 'openai/gpt-oss-120b',
+		requirement: 'email',
+		freeModels: 12,
+		maxContext: '1M',
+		rateLimit: 'Per-model caps on the free tier; 429 if you burst',
+		modalities: ['text', 'image', 'reasoning'],
+		openaiCompatible: true,
+		docsUrl: 'https://vercel.com/docs/ai-gateway',
+		gotchas: [
+			'The $5 monthly credit only spends on the Free Tier subset. Claude Opus/Sonnet 5, Gemini 3.7 and GPT-5.6 are paid.',
+			'Buying AI Gateway Credits moves the team to the paid tier and the monthly $5 stops.',
+			'Browse vercel.com/ai-gateway/models?freeTier=true for the full subset — we list the current standouts, not every id.'
 		]
 	},
 	cerebras: {
@@ -257,7 +257,7 @@ export const PROVIDERS: Record<string, Provider> = {
 		openaiCompatible: true,
 		gotchas: [
 			'Works with the placeholder key "unused" if you never grab a token.',
-			'Anonymous traffic is the turbo set only: codestral-latest, gemma4:31b, gpt-oss, minimax-m2.7, mistral-Nemo-Instruct-2407.'
+			'Anonymous traffic is the turbo set only: codestral-latest, gemma4:31b, gpt-oss (GPT-OSS 120B), minimax-m2.7, mistral-Nemo-Instruct-2407.'
 		]
 	},
 	deepseek: {
@@ -337,23 +337,6 @@ export const PROVIDERS: Record<string, Provider> = {
 		modalities: ['text', 'image', 'reasoning'],
 		openaiCompatible: true,
 		docsUrl: 'https://docs.sambanova.ai/'
-	},
-	xai: {
-		baseUrl: 'https://api.x.ai/v1',
-		apiKeyUrl: 'https://console.x.ai',
-		envVar: 'XAI_API_KEY',
-		exampleModel: 'grok-4.6',
-		requirement: 'email',
-		freeModels: 3,
-		maxContext: '1M',
-		rateLimit: 'Prepaid credits; no standing free model list',
-		modalities: ['text'],
-		openaiCompatible: true,
-		docsUrl: 'https://docs.x.ai/',
-		gotchas: [
-			'grok-4-1-fast retired on 15 May 2026 and now aliases to grok-4.3. Current flagship is grok-4.6 (500K).',
-			'Docs do not publish complimentary credits — you load a pot, then spend it.'
-		]
 	},
 	'ollama-cloud': {
 		baseUrl: 'https://api.ollama.com/v1',
@@ -479,21 +462,6 @@ export const PROVIDERS: Record<string, Provider> = {
 		gotchas: [
 			'The China console (siliconflow.cn) registers with an SMS to a mainland number. Identity verification unlocks the standing free set.',
 			'DeepSeek-R1 and DeepSeek-V3 on SiliconFlow are paid. The standing free set is smaller open weights after KYC.'
-		]
-	},
-	chutes: {
-		baseUrl: 'https://llm.chutes.ai/v1',
-		apiKeyUrl: 'https://chutes.ai/',
-		envVar: 'CHUTES_API_KEY',
-		exampleModel: 'deepseek-ai/DeepSeek-V4-Flash-0731-TEE',
-		requirement: 'email',
-		maxContext: '1M',
-		rateLimit: 'Paid per token — no standing free slice',
-		modalities: ['text', 'reasoning'],
-		openaiCompatible: true,
-		gotchas: [
-			'The live catalogue is 14 TEE models, all priced. DeepSeek R1 and Llama 3.3 70B are gone.',
-			'There is no published free tier. Treat Chutes as cheap PAYG, not a free API.'
 		]
 	},
 	glhf: {
