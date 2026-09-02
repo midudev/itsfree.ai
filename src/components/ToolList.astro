@@ -55,7 +55,7 @@ function kindOf(resource: Resource): string {
 <style>
 	.list {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(460px, 100%), 1fr));
 		gap: 0 44px;
 	}
 
@@ -109,8 +109,16 @@ function kindOf(resource: Resource): string {
 	}
 
 	@media (max-width: 640px) {
+		.item {
+			min-width: 0;
+		}
+
 		.name {
 			width: auto;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 
 		.why {

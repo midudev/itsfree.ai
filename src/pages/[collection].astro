@@ -176,7 +176,7 @@ const schemas = [
 
 	.faq {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
 		gap: 0 44px;
 	}
 
@@ -201,7 +201,7 @@ const schemas = [
 
 	.others {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
 		gap: 8px;
 		margin: 0;
 		padding: 0;

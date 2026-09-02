@@ -65,6 +65,10 @@ links: [models, collections]
   by: cursor
   from: agent
   tech: pick star next to OpenRouter; same class of one-key gateway
+- [x] Make the provider table readable on a phone {#table-mobile}
+  by: cursor
+  from: agent
+  tech: stack each row as a card below 820px; kill horizontal overflow from FAQ/tools grids
 
 ## List every free model {#models}
 files: [src/data/models.ts, src/pages/models.astro, src/pages/model/[slug].astro]
@@ -122,6 +126,8 @@ files: [src/layouts/Layout.astro, src/lib/seo.ts, src/components/SiteHeader.astr
   tech: @astrojs/cloudflare adapter, static output, wrangler.jsonc with 404-page
 
 ## decisions
+
+- 2026-09-02: On a phone the provider table becomes stacked cards, not a squeezed four-column grid. Full name and quota wrap; models, context and signup sit on one meta line; includes chips stay one line with the existing overflow ellipsis. FAQ, tools and runtime grids use `minmax(min(Npx, 100%), 1fr)` so they cannot force a horizontal scrollbar.
 
 - 2026-09-02: Vercel AI Gateway is a real free host: $5 of monthly credits on the Free Tier model subset (`vercel.com/ai-gateway/models?freeTier=true`). Buying credits ends the monthly grant. Do not list the whole subset — chips are the current standouts (GPT-OSS 120B, GPT-5.4 Mini, Gemma 4 31B, Qwen 3.8 Flash Next, GLM 5.3 Flash, Kimi K2.7 Code, MiniMax M3, Nemotron 3 Super, Llama 4 Maverick, Grok 4.6, Gemini 2.5 Flash, DeepSeek V3.2 Thinking). Frontier Claude / Gemini 3.7 / GPT-5.6 are paid. Base `https://ai-gateway.vercel.sh/v1`.
 

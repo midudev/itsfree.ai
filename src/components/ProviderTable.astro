@@ -60,10 +60,13 @@ const rows = resources.map((resource) => {
 						</a>
 						{resource.pick && <PickBadge size={20} />}
 					</th>
-					<td class="mono strong">{resource.quota}</td>
-					<td class="mono right muted">{provider.maxContext ?? '—'}</td>
-					<td class="mono right muted">{provider.freeModels ?? '—'}</td>
-					<td class:list={['mono', 'small', { free }]}>{signup}</td>
+					<td class="mono strong quota">{resource.quota}</td>
+					<td class="mono right muted ctx">{provider.maxContext ?? '—'}</td>
+					<td class="mono right muted models">
+						{provider.freeModels ?? '—'}
+						<span class="unit"> models</span>
+					</td>
+					<td class:list={['mono', 'small', 'signup', { free }]}>{signup}</td>
 					<td class="includes">
 						<div class="chips" data-chips>
 							{models.map((model) =>
@@ -303,17 +306,115 @@ const rows = resources.map((resource) => {
 		cursor: default;
 	}
 
+	.unit {
+		display: none;
+	}
+
 	@media (max-width: 1000px) {
 		thead th:nth-child(3),
-		td:nth-child(3) {
+		.ctx {
 			display: none;
 		}
 	}
 
 	@media (max-width: 820px) {
-		thead th:last-child,
-		.includes {
+		.table,
+		tbody {
+			display: block;
+			width: 100%;
+		}
+
+		thead {
 			display: none;
+		}
+
+		.row {
+			display: grid;
+			grid-template-columns: auto auto 1fr;
+			grid-template-areas:
+				'ident ident ident'
+				'quota quota quota'
+				'ctx models signup'
+				'chips chips chips';
+			align-items: baseline;
+			column-gap: 0;
+			row-gap: 7px;
+			padding: 16px 0;
+		}
+
+		.row:first-child {
+			border-top: 1px solid #161616;
+		}
+
+		td,
+		tbody th {
+			display: block;
+			width: auto;
+			padding: 0;
+		}
+
+		tbody th.ident {
+			display: flex;
+			grid-area: ident;
+			padding: 0;
+		}
+
+		.ident a {
+			flex: 0 1 auto;
+			width: auto;
+		}
+
+		.name {
+			white-space: normal;
+			overflow: visible;
+			text-overflow: unset;
+		}
+
+		.quota {
+			grid-area: quota;
+			white-space: normal;
+			overflow: visible;
+			text-overflow: unset;
+			font-size: 13px;
+			line-height: 1.45;
+		}
+
+		.ctx,
+		.models,
+		.signup {
+			font-size: 12px;
+			text-align: left;
+			color: var(--fg-faint);
+		}
+
+		.ctx {
+			display: block;
+			grid-area: ctx;
+		}
+
+		.models {
+			grid-area: models;
+		}
+
+		.signup {
+			grid-area: signup;
+		}
+
+		.ctx::after,
+		.models::after {
+			content: '·';
+			margin-inline: 8px;
+			color: var(--fg-dim);
+		}
+
+		.unit {
+			display: inline;
+		}
+
+		.includes {
+			grid-area: chips;
+			display: block;
+			min-width: 0;
 		}
 	}
 </style>
