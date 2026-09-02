@@ -41,6 +41,30 @@ links: [models, collections]
   by: cursor
   from: agent
   tech: quota is $5 once at signup, not a 30-day trial; card still unlocks it
+- [x] Drop Grok 3 from xAI {#drop-grok-3}
+  by: cursor
+  from: agent
+  tech: catalog keeps grok-4.6 and grok-4.3; freeModels 2
+- [x] Drop hosts with no free tier or free credits {#no-free-out}
+  by: cursor
+  from: agent
+  tech: keep standing free or a published signup credit; prepaid-only hosts leave
+- [x] Add Vercel AI Gateway’s $5 free tier {#vercel-gateway}
+  by: cursor
+  from: agent
+  tech: $5/month on the free-tier subset; curated chips, not the full ~150 chat ids
+- [x] Drop the awesome-freellm-apis listing {#drop-freellm-repo}
+  by: cursor
+  from: agent
+  tech: remove the tool card, icon and favicon map; keep official-docs as the source of figures
+- [x] Pin isbetter.ai and canirun.ai at the top of tools {#pin-tools}
+  by: cursor
+  from: agent
+  tech: toolbox list leads with those two picks; ToolList shows the star badge
+- [x] Highlight Vercel AI Gateway in the table {#pick-vercel}
+  by: cursor
+  from: agent
+  tech: pick star next to OpenRouter; same class of one-key gateway
 
 ## List every free model {#models}
 files: [src/data/models.ts, src/pages/models.astro, src/pages/model/[slug].astro]
@@ -61,6 +85,10 @@ links: [providers]
   by: cursor
   from: agent
   tech: Includes column uses catalogFor; pin GPT-OSS 120B then Qwen 3.8 27B; overflow stays …
+- [x] Give every homepage chip a vendor icon and a human name {#chip-display}
+  by: cursor
+  from: agent
+  tech: vendorOf + prettyModelName; LLM7 gpt-oss displays as GPT-OSS 120B; new vendor favicons
 - [x] Name every host’s chips with the exact weight it serves {#exact-chips}
   by: cursor
   from: agent
@@ -94,6 +122,12 @@ files: [src/layouts/Layout.astro, src/lib/seo.ts, src/components/SiteHeader.astr
   tech: @astrojs/cloudflare adapter, static output, wrangler.jsonc with 404-page
 
 ## decisions
+
+- 2026-09-02: Vercel AI Gateway is a real free host: $5 of monthly credits on the Free Tier model subset (`vercel.com/ai-gateway/models?freeTier=true`). Buying credits ends the monthly grant. Do not list the whole subset — chips are the current standouts (GPT-OSS 120B, GPT-5.4 Mini, Gemma 4 31B, Qwen 3.8 Flash Next, GLM 5.3 Flash, Kimi K2.7 Code, MiniMax M3, Nemotron 3 Super, Llama 4 Maverick, Grok 4.6, Gemini 2.5 Flash, DeepSeek V3.2 Thinking). Frontier Claude / Gemini 3.7 / GPT-5.6 are paid. Base `https://ai-gateway.vercel.sh/v1`.
+
+- 2026-09-02: A hosted API stays only if it has a standing free slice or a published signup credit. Official docs win: xAI’s tutorial says “load it with credits” and publishes no grant; Chutes is pay-per-token with the old free perk retired; Inference.net’s $0 plan is 1M Gateway BYOK plus 30 RPM, with hosted models billed to a pot they never price. Those three leave. Cerebras $5, DeepSeek signup tokens, HF $0.10/mo, Ollama Cloud starter credits, Alibaba 90-day 1M, AI21/Nscale/Nebius trials stay.
+
+- 2026-09-02: Homepage chips get a vendor icon from the model page when the id aliases to a slug, otherwise from `vendorOf(id)` (prefix map). Display names go through `prettyModelName` so `gpt-oss`, `gpt-oss-120b` and `GPT-OSS 120B` all read GPT-OSS 120B. LLM7’s live id stays `gpt-oss`; the chip says GPT-OSS 120B (131K turbo, flagship default). New vendor favicons: Anthropic, MiniMax, Liquid, InclusionAI, 01.AI, IBM, Adept, Dots.
 
 - 2026-09-01: One 1200×630 PNG per shareable route (`/og.png` for home, `/og/…` for the rest). Titles clamp to 60 characters, descriptions to 110–160, no URLs in `og:description`. Favicon set matches the OpenGraph.to complete setup, including `site.webmanifest`.
 - 2026-09-01: Deploy on Cloudflare Workers via `@astrojs/cloudflare`. The catalog stays static (`output: 'static'`); Wrangler serves `dist/` and the custom 404. No session KV.
