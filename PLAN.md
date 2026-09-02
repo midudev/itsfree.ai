@@ -37,6 +37,10 @@ links: [models, collections]
   by: cursor
   from: agent
   tech: rename registration→email; phone is NIM, ModelScope, SiliconFlow, Zhipu, Alibaba; Kilo is none
+- [x] Call Cerebras a one-time $5 signup credit {#cerebras-onetime}
+  by: cursor
+  from: agent
+  tech: quota is $5 once at signup, not a 30-day trial; card still unlocks it
 
 ## List every free model {#models}
 files: [src/data/models.ts, src/pages/models.astro, src/pages/model/[slug].astro]
@@ -53,10 +57,18 @@ links: [providers]
   by: cursor
   from: agent
   tech: new slugs qwen-3-8-27b / qwen-3-6-27b; Groq lists both; Cloudflare’s free chip is 3.8 27B
+- [x] Homepage chips match the provider catalog {#homepage-chips}
+  by: cursor
+  from: agent
+  tech: Includes column uses catalogFor; pin GPT-OSS 120B then Qwen 3.8 27B; overflow stays …
 - [x] Name every host’s chips with the exact weight it serves {#exact-chips}
   by: cursor
   from: agent
   tech: AMD Qwen3.8-Flash-Next; hosted APIs drop family buckets when the live id is one variant
+- [x] Replace leftover Qwen 3 chips on hosted APIs {#qwen3-leftover}
+  by: cursor
+  from: agent
+  tech: CF 30B-A3B; HF/ModelScope 3.8 27B; Ollama Cloud 3.5 397B; drop Nebius qwen3
 
 ## Group by what you need {#collections}
 files: [src/data/collections.ts, src/pages/[collection].astro]
@@ -99,5 +111,8 @@ files: [src/layouts/Layout.astro, src/lib/seo.ts, src/components/SiteHeader.astr
 - 2026-09-02: Requesty is a new hosted gateway. Free tier is 200 requests/day and 20/min on the $0 models, no card, shared across the free pool. Live `router.requesty.ai/v1/models` has 12 ids at $0 (docs table lists 9). Base `https://router.requesty.ai/v1`. Example `nvidia/nemotron-3-super-120b-a12b`. The 600+ catalogue is PAYG + 5%.
 - 2026-09-02: Includes chips name the weight a host actually serves. Groq’s free Qwen ids are `qwen/qwen3.8-27b` and `qwen/qwen3.6-27b`, not the `qwen3` family bucket. Cloudflare’s free long window is `@cf/qwen/qwen3.8-27b`. Keep the family slug for hosts that mix Qwen 3 sizes.
 - 2026-09-02: Featured chips on hosted APIs use the exact SKU, not the family bucket. AMD’s Qwen is `Qwen3.8-Flash-Next`, not “Qwen 3”. New slugs for Flash-Next, V4 Flash, GLM 4.7 Flash, Qwen 3.7 Plus, Qwen 3 8B, Nemotron 3 Super, Mistral Small, Gemma 4 31B. Family slugs stay on local runtimes and mixed routers. A `family` field still lists the host on the parent `/model/` page.
+- 2026-09-02: No hosted API chip may say “Qwen 3”. Cloudflare’s second Qwen is `@cf/qwen/qwen3-30b-a3b-fp8` (30B-A3B), not a family bucket. Hugging Face and ModelScope feature Qwen 3.8 27B. Ollama Cloud’s Qwen is `qwen3.5:397b`. Nebius’s live catalog has no Qwen.
+- 2026-09-02: Homepage Includes chips are the same catalogue as the provider page, not a stale featured subset. GPT-OSS 120B and Qwen 3.8 27B are pinned first when the host serves them; the existing overflow script hides the rest behind …. Groq’s seven free ids include Safeguard 20B and Compound Mini. Kimi is not on Groq.
 - 2026-09-02: The provider detail page lists the full free catalog (id + name). Featured `resource.models` stay as table chips only. Ids that match a MODELS slug link through; the rest are display-only so the featured set stays small. Local runtimes keep the family chips — they do not offer a fixed hosted list.
 - 2026-09-02: Signup is the gate to call the free tier: `none`, `email`, `phone` or `card`. The old `registration` value is `email`. Phone is NVIDIA NIM, ModelScope, SiliconFlow, Zhipu on `bigmodel.cn`, and Alibaba Model Studio. Card is Cerebras and Nebius. Kilo’s `:free` models answer without a key.
+- 2026-09-02: Cerebras grants $5 once at signup, not a $5/30-day trial. A payment method still unlocks the credit. After the five dollars you buy more. Rate limits on that credit stay 5 RPM / 1M TPD.
