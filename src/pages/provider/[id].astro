@@ -244,6 +244,7 @@ const schemas = [
 							return (
 								<li data-model-row data-search={search}>
 									<div class="model-row">
+										{model.vendor && <Favicon id={model.vendor} kind="vendors" size={18} />}
 										{model.slug ? (
 											<a class="model-name" href={`/model/${model.slug}/`}>
 												{model.name}

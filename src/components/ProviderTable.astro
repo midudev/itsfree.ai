@@ -74,6 +74,7 @@ const rows = resources.map((resource) => {
 									</a>
 								) : (
 									<span class="chip" data-name={model.name}>
+										{model.vendor && <Favicon id={model.vendor} kind="vendors" size={14} />}
 										<span>{model.name}</span>
 									</span>
 								)

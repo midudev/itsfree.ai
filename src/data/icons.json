@@ -24,20 +24,12 @@
 			"src": "/icons/artificial-analysis.png",
 			"tone": "dark"
 		},
-		"awesome-freellm-apis": {
-			"src": "/icons/awesome-freellm-apis.svg",
-			"tone": "dark"
-		},
 		"can-i-run-ai": {
 			"src": "/icons/can-i-run-ai.svg",
 			"tone": "dark"
 		},
 		"cerebras": {
 			"src": "/icons/cerebras.png",
-			"tone": "dark"
-		},
-		"chutes": {
-			"src": "/icons/chutes.png",
 			"tone": "dark"
 		},
 		"cline": {
@@ -87,10 +79,6 @@
 		"huggingface-spaces": {
 			"src": "/icons/huggingface-spaces.png",
 			"tone": "light"
-		},
-		"inference-net": {
-			"src": "/icons/inference-net.svg",
-			"tone": "dark"
 		},
 		"isbetter-ai": {
 			"src": "/icons/isbetter-ai.svg",
@@ -192,12 +180,12 @@
 			"src": "/icons/tokenizer.png",
 			"tone": "light"
 		},
+		"vercel-ai-gateway": {
+			"src": "/icons/vercel-ai-gateway.png",
+			"tone": "dark"
+		},
 		"vllm": {
 			"src": "/icons/vllm.png",
-			"tone": "light"
-		},
-		"xai": {
-			"src": "/icons/xai.png",
 			"tone": "light"
 		},
 		"zai": {
@@ -206,6 +194,10 @@
 		}
 	},
 	"vendors": {
+		"adept": {
+			"src": "/vendors/adept.png",
+			"tone": "dark"
+		},
 		"ai21": {
 			"src": "/vendors/ai21.png",
 			"tone": "dark"
@@ -214,12 +206,20 @@
 			"src": "/vendors/alibaba.png",
 			"tone": "dark"
 		},
+		"anthropic": {
+			"src": "/vendors/anthropic.png",
+			"tone": "light"
+		},
 		"cohere": {
 			"src": "/vendors/cohere.png",
 			"tone": "dark"
 		},
 		"deepseek": {
 			"src": "/vendors/deepseek.png",
+			"tone": "dark"
+		},
+		"dots": {
+			"src": "/vendors/dots.png",
 			"tone": "dark"
 		},
 		"google": {
@@ -230,12 +230,28 @@
 			"src": "/vendors/groq.svg",
 			"tone": "dark"
 		},
+		"ibm": {
+			"src": "/vendors/ibm.png",
+			"tone": "dark"
+		},
+		"inclusionai": {
+			"src": "/vendors/inclusionai.svg",
+			"tone": "dark"
+		},
+		"liquid": {
+			"src": "/vendors/liquid.png",
+			"tone": "dark"
+		},
 		"meta": {
 			"src": "/vendors/meta.png",
 			"tone": "light"
 		},
 		"microsoft": {
 			"src": "/vendors/microsoft.png",
+			"tone": "dark"
+		},
+		"minimax": {
+			"src": "/vendors/minimax.svg",
 			"tone": "dark"
 		},
 		"mistral": {
@@ -261,6 +277,10 @@
 		"xai": {
 			"src": "/vendors/xai.png",
 			"tone": "light"
+		},
+		"yi": {
+			"src": "/vendors/yi.svg",
+			"tone": "dark"
 		},
 		"zai": {
 			"src": "/vendors/zai.svg",

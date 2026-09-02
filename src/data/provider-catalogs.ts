@@ -15,6 +15,7 @@ export interface CatalogModel {
 export interface CatalogRow extends CatalogModel {
 	/** Featured /model/<slug> page, when this id maps onto one */
 	slug?: string
+	vendor?: VendorId
 }
 
 export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
@@ -334,66 +335,6 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'CohereLabs/tiny-aya-earth', name: 'tiny-aya-earth' },
 		{ id: 'CohereLabs/tiny-aya-fire', name: 'tiny-aya-fire' },
 	],
-	"inference-net": [
-		{ id: 'claude-fable-5', name: 'claude-fable-5' },
-		{ id: 'claude-haiku-4-5', name: 'claude-haiku-4-5' },
-		{ id: 'claude-opus-4-6', name: 'claude-opus-4-6' },
-		{ id: 'claude-opus-4-7', name: 'claude-opus-4-7' },
-		{ id: 'claude-opus-4-8', name: 'claude-opus-4-8' },
-		{ id: 'claude-opus-5', name: 'claude-opus-5' },
-		{ id: 'claude-sonnet-4-6', name: 'claude-sonnet-4-6' },
-		{ id: 'deepseek-v3.2', name: 'deepseek-v3.2' },
-		{ id: 'deepseek-v4-flash', name: 'deepseek-v4-flash' },
-		{ id: 'deepseek-v4-flash-0731', name: 'deepseek-v4-flash-0731' },
-		{ id: 'deepseek-v4-pro', name: 'deepseek-v4-pro' },
-		{ id: 'deepseek-v4-pro-0813', name: 'deepseek-v4-pro-0813' },
-		{ id: 'gemini-2.5-flash', name: 'gemini-2.5-flash' },
-		{ id: 'gemini-2.5-flash-lite', name: 'gemini-2.5-flash-lite' },
-		{ id: 'gemini-2.5-pro', name: 'gemini-2.5-pro' },
-		{ id: 'gemini-3-flash-preview', name: 'gemini-3-flash-preview' },
-		{ id: 'gemini-3.1-flash-lite', name: 'gemini-3.1-flash-lite' },
-		{ id: 'gemini-3.1-pro-preview', name: 'gemini-3.1-pro-preview' },
-		{ id: 'gemini-3.5-flash', name: 'gemini-3.5-flash' },
-		{ id: 'gemini-3.5-flash-lite', name: 'gemini-3.5-flash-lite' },
-		{ id: 'gemini-3.6-flash', name: 'gemini-3.6-flash' },
-		{ id: 'gemini-3.7-flash', name: 'gemini-3.7-flash' },
-		{ id: 'gemma-3-27b-it', name: 'gemma-3-27b-it' },
-		{ id: 'gemma-3-4b-it', name: 'gemma-3-4b-it' },
-		{ id: 'glm-5', name: 'glm-5' },
-		{ id: 'glm-5.2', name: 'glm-5.2' },
-		{ id: 'glm-5.2-fast', name: 'glm-5.2-fast' },
-		{ id: 'glm-5.3', name: 'glm-5.3' },
-		{ id: 'glm-5.3-flash', name: 'glm-5.3-flash' },
-		{ id: 'gpt-4.1', name: 'gpt-4.1' },
-		{ id: 'gpt-4.1-mini', name: 'gpt-4.1-mini' },
-		{ id: 'gpt-4.1-nano', name: 'gpt-4.1-nano' },
-		{ id: 'gpt-4o', name: 'gpt-4o' },
-		{ id: 'gpt-4o-mini', name: 'gpt-4o-mini' },
-		{ id: 'gpt-5-mini', name: 'gpt-5-mini' },
-		{ id: 'gpt-5-nano', name: 'gpt-5-nano' },
-		{ id: 'gpt-5.4', name: 'gpt-5.4' },
-		{ id: 'gpt-5.5', name: 'gpt-5.5' },
-		{ id: 'gpt-5.6-luna', name: 'gpt-5.6-luna' },
-		{ id: 'gpt-5.6-sol', name: 'gpt-5.6-sol' },
-		{ id: 'gpt-5.6-terra', name: 'gpt-5.6-terra' },
-		{ id: 'grok-4.5', name: 'grok-4.5' },
-		{ id: 'grok-4.6', name: 'grok-4.6' },
-		{ id: 'kimi-k2.5', name: 'kimi-k2.5' },
-		{ id: 'kimi-k2.6', name: 'kimi-k2.6' },
-		{ id: 'kimi-k3', name: 'kimi-k3' },
-		{ id: 'kimi-k3-fast', name: 'kimi-k3-fast' },
-		{ id: 'llama-3.2-1b-instruct', name: 'llama-3.2-1b-instruct' },
-		{ id: 'llama-3.2-3b-instruct', name: 'llama-3.2-3b-instruct' },
-		{ id: 'llama-3.3-70b-instruct', name: 'llama-3.3-70b-instruct' },
-		{ id: 'nemotron-3-super', name: 'nemotron-3-super' },
-		{ id: 'qwen3-14b', name: 'qwen3-14b' },
-		{ id: 'qwen3-30b-a3b', name: 'qwen3-30b-a3b' },
-		{ id: 'qwen3-8b', name: 'qwen3-8b' },
-		{ id: 'qwen3-max-thinking', name: 'qwen3-max-thinking' },
-		{ id: 'qwen3.7-plus', name: 'qwen3.7-plus' },
-		{ id: 'inference-net/schematron-v2-small', name: 'schematron-v2-small' },
-		{ id: 'inference-net/schematron-v2-turbo', name: 'schematron-v2-turbo' },
-	],
 	"kilo-code": [
 		{ id: 'kilo-auto/free', name: 'Auto Free' },
 		{ id: 'stepfun/step-3.7-flash:free', name: 'StepFun: Step 3.7 Flash' },
@@ -417,7 +358,7 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'openrouter/free', name: 'OpenRouter Free Models Router' },
 	],
 	"llm7": [
-		{ id: 'gpt-oss', name: 'gpt-oss' },
+		{ id: 'gpt-oss', name: 'GPT-OSS 120B' },
 		{ id: 'gemma4:31b', name: 'Gemma 4 31B' },
 		{ id: 'minimax-m2.7', name: 'MiniMax M2.7' },
 		{ id: 'codestral-latest', name: 'Codestral' },
@@ -601,6 +542,20 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'nvidia/muse-glimmer-30b', name: 'muse-glimmer-30b' },
 		{ id: 'nvidia/nemotron-3.5-lightning-30b-a3b', name: 'nemotron-3.5-lightning-30b-a3b' },
 	],
+	"vercel-ai-gateway": [
+		{ id: 'openai/gpt-oss-120b', name: 'GPT-OSS 120B' },
+		{ id: 'openai/gpt-5.4-mini', name: 'GPT-5.4 Mini' },
+		{ id: 'google/gemma-4-31b-it', name: 'Gemma 4 31B' },
+		{ id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash' },
+		{ id: 'alibaba/qwen3.8-flash-next', name: 'Qwen 3.8 Flash Next' },
+		{ id: 'zai/glm-5.3-flash', name: 'GLM 5.3 Flash' },
+		{ id: 'moonshotai/kimi-k2.7-code', name: 'Kimi K2.7 Code' },
+		{ id: 'minimax/minimax-m3', name: 'MiniMax M3' },
+		{ id: 'nvidia/nemotron-3-super-120b-a12b', name: 'Nemotron 3 Super' },
+		{ id: 'meta/llama-4-maverick', name: 'Llama 4 Maverick' },
+		{ id: 'spacexai/grok-4.6', name: 'Grok 4.6' },
+		{ id: 'deepseek/deepseek-v3.2-thinking', name: 'DeepSeek V3.2 Thinking' },
+	],
 	"sambanova": [
 		{ id: 'Meta-Llama-3.3-70B-Instruct', name: 'Llama 3.3 70B' },
 		{ id: 'DeepSeek-V3.1', name: 'DeepSeek V3.1' },
@@ -615,11 +570,6 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'Qwen/Qwen2.5-7B-Instruct', name: 'Qwen 2.5 7B' },
 		{ id: 'THUDM/glm-4-9b-chat', name: 'GLM 4 9B' },
 	],
-	"xai": [
-		{ id: 'grok-4.6', name: 'Grok 4.6' },
-		{ id: 'grok-4.3', name: 'Grok 4.3' },
-		{ id: 'grok-3', name: 'Grok 3' },
-	],
 	"zai": [
 		{ id: 'glm-4.7-flash', name: 'GLM 4.7 Flash' },
 		{ id: 'glm-4.5-flash', name: 'GLM 4.5 Flash' },
@@ -632,6 +582,100 @@ function normalize(value: string): string {
 	return value.toLowerCase().replace(/^@cf\//, '').replace(/:free$/, '')
 }
 
+function basename(id: string): string {
+	return id.split('/').pop() ?? id
+}
+
+function looksRaw(name: string): boolean {
+	if (!name) return true
+	if (name === name.toLowerCase()) return true
+	return !/\s/.test(name) && /[-_/]/.test(name)
+}
+
+/** Display name: GPT-OSS 120B, not gpt-oss-120b. API id stays on the row. */
+export function prettyModelName(id: string, name = ''): string {
+	const base = basename(normalize(id)).replace(/:free$/, '')
+	if (/^gpt-oss(-120b|:120b)?$/.test(base)) return 'GPT-OSS 120B'
+	if (/^gpt-oss(-20b|:20b)$/.test(base)) return 'GPT-OSS 20B'
+	if (/gpt-oss/.test(base) && /safeguard/.test(base)) return 'GPT-OSS Safeguard 20B'
+	if (base.startsWith('claude-')) return prettyClaude(base)
+	const source = looksRaw(name) ? basename(id).replace(/:free$/i, '') : name
+	return humanize(source)
+}
+
+function prettyClaude(base: string): string {
+	const parts = base.replace(/^claude-/, '').split('-')
+	const last = parts.at(-1) ?? ''
+	const prev = parts.at(-2) ?? ''
+	if (/^\d+$/.test(last) && /^\d+$/.test(prev)) {
+		const family = parts
+			.slice(0, -2)
+			.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+			.join(' ')
+		return `Claude ${family} ${prev}.${last}`
+	}
+	return `Claude ${humanize(parts.join(' '))}`
+}
+
+function humanize(raw: string): string {
+	let text = basename(raw).replace(/:free$/i, '').replace(/:/g, '-')
+	text = text.replace(/\bLFM(?=\d)/i, 'LFM ')
+	text = text.replace(/([A-Za-z]*[a-z][A-Za-z]+)(\d)/g, '$1 $2')
+	text = text.replace(/[-_]+/g, ' ')
+	text = text.replace(/\s+/g, ' ').trim()
+	text = text.replace(/\b\w/g, (char) => char.toUpperCase())
+	return text
+		.replace(/\bGpt Oss\b/g, 'GPT-OSS')
+		.replace(/\bGpt\b/g, 'GPT')
+		.replace(/\bGlm\b/g, 'GLM')
+		.replace(/\bTts\b/g, 'TTS')
+		.replace(/\bVl\b/g, 'VL')
+		.replace(/\bMoe\b/g, 'MoE')
+		.replace(/\bLfm\b/g, 'LFM')
+		.replace(/\bXs\b/g, 'XS')
+		.replace(/\bFp 8\b/g, 'FP8')
+		.replace(/\bFp8\b/g, 'FP8')
+		.replace(/\bBf16\b/g, 'BF16')
+		.replace(/\bNvfp4\b/g, 'NVFP4')
+		.replace(/\bDeepseek\b/g, 'DeepSeek')
+		.replace(/\bMinimax\b/g, 'MiniMax')
+		.replace(/\bNemotron\b/g, 'Nemotron')
+		.replace(/(\d+(?:\.\d+)?)([KMG])?b\b/gi, (_, n, p) => `${n}${p ?? ''}B`)
+		.replace(/\bInstruct\b/g, '')
+		.replace(/\s+It$/i, '')
+		.replace(/\b(\d) (\d)$/g, '$1.$2')
+		.replace(/\s+/g, ' ')
+		.trim()
+}
+
+export function vendorOf(id: string): VendorId | undefined {
+	const n = id.toLowerCase()
+	if (/(^|\/)(gemini|gemma|imagen)/.test(n) || n.startsWith('google/')) return 'google'
+	if (/gpt-oss|openai\//.test(n)) return 'openai'
+	if (/claude|anthropic/.test(n)) return 'anthropic'
+	if (/qwen|dashscope/.test(n)) return 'alibaba'
+	if (/llama|muse-glimmer|meta[-/]|meta-models|meta-llama/.test(n)) return 'meta'
+	if (/nemotron|nvidia/.test(n)) return 'nvidia'
+	if (/(mistral|mixtral|codestral|devstral|pixtral|magistral|open-mistral)/.test(n)) return 'mistral'
+	if (/command-|c4ai-|cohere|north-mini|(^|\/)(embed-|rerank-)/.test(n)) return 'cohere'
+	if (/glm|zai-org|zhipu|bigmodel/.test(n)) return 'zai'
+	if (/kimi|moonshot/.test(n)) return 'moonshot'
+	if (/deepseek/.test(n)) return 'deepseek'
+	if (/laguna|poolside/.test(n)) return 'poolside'
+	if (/minimax/.test(n)) return 'minimax'
+	if (/ling-|inclusion/.test(n)) return 'inclusionai'
+	if (/\blfm|liquid\//.test(n)) return 'liquid'
+	if (/(^|\/)(yi-|01-ai)/.test(n)) return 'yi'
+	if (/grok|xai|spacexai/.test(n)) return 'xai'
+	if (/phi-|microsoft/.test(n)) return 'microsoft'
+	if (/jamba|ai21/.test(n)) return 'ai21'
+	if (/groq\//.test(n)) return 'groq'
+	if (/ibm|granite/.test(n)) return 'ibm'
+	if (/fuyu|adept/.test(n)) return 'adept'
+	if (/dots/.test(n)) return 'dots'
+	return undefined
+}
+
 const ALIASES: Array<[RegExp, string]> = [
 	[/qwen3?\.?8-27b/, 'qwen-3-8-27b'],
 	[/qwen3?\.?6-27b/, 'qwen-3-6-27b'],
@@ -641,8 +685,10 @@ const ALIASES: Array<[RegExp, string]> = [
 	[/qwen3\.7-plus/, 'qwen-3-7-plus'],
 	[/qwen3-8b$/, 'qwen-3-8b'],
 	[/gpt-oss-120b|gpt-oss:120b/, 'gpt-oss-120b'],
+	[/^gpt-oss$/, 'gpt-oss-120b'],
 	[/gpt-oss-20b|gpt-oss:20b/, 'gpt-oss-20b'],
 	[/gpt-oss-safeguard-20b/, 'gpt-oss-safeguard'],
+	[/gemma-?4[:.-]31b/, 'gemma-4-31b'],
 	[/groq\/compound-mini/, 'groq-compound-mini'],
 	[/groq\/compound$/, 'groq-compound'],
 	[/llama-3[._-]3-70b|llama3\.3/, 'llama-3-3-70b'],
@@ -657,7 +703,6 @@ const ALIASES: Array<[RegExp, string]> = [
 	[/glm-5/, 'glm-5'],
 	[/command-a/, 'command-a'],
 	[/jamba/, 'jamba'],
-	[/grok-4/, 'grok-4'],
 	[/mistral-small|mistral-medium/, 'mistral-medium'],
 	[/qwen2?\.?5-coder|qwen-coder|qwen3-coder/, 'qwen-coder'],
 ]
@@ -665,9 +710,14 @@ const ALIASES: Array<[RegExp, string]> = [
 function withSlug(entry: CatalogModel): CatalogRow {
 	const needle = normalize(entry.id)
 	const exact = MODELS.find((model) => model.apiId && normalize(model.apiId) === needle)
-	if (exact) return { ...entry, slug: exact.slug }
-	const alias = ALIASES.find(([pattern]) => pattern.test(needle))
-	return alias ? { ...entry, slug: alias[1] } : entry
+	const slug = exact?.slug ?? ALIASES.find(([pattern]) => pattern.test(needle))?.[1]
+	const model = slug ? MODEL_BY_SLUG.get(slug) : undefined
+	return {
+		id: entry.id,
+		name: prettyModelName(entry.id, entry.name),
+		slug,
+		vendor: model?.vendor ?? vendorOf(entry.id)
+	}
 }
 
 /** Full hosted catalogue, or the featured chips when the host has no fixed list. */
@@ -684,7 +734,7 @@ export interface HomepageChip {
 }
 
 function pinRank(row: CatalogRow): number {
-	if (row.slug === 'gpt-oss-120b' || /gpt-oss-120b/.test(row.id)) return 0
+	if (row.slug === 'gpt-oss-120b' || /(^|\/)gpt-oss(-120b|:120b)?$/.test(normalize(row.id))) return 0
 	if (row.slug === 'qwen-3-8-27b' || /qwen3\.8-27b/i.test(row.id)) return 1
 	return 1000
 }
@@ -694,9 +744,10 @@ export function homepageChips(providerId: string, featured: CatalogModel[] = [])
 	return catalogFor(providerId, featured)
 		.map((row, index) => ({ row, index, pin: pinRank(row) }))
 		.sort((a, b) => a.pin - b.pin || a.index - b.index)
-		.map(({ row }) => {
-			const model = row.slug ? MODEL_BY_SLUG.get(row.slug) : undefined
-			return { name: row.name, slug: row.slug, vendor: model?.vendor }
-		})
+		.map(({ row }) => ({
+			name: row.name,
+			slug: row.slug,
+			vendor: row.vendor
+		}))
 }
 

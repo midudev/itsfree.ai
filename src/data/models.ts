@@ -14,6 +14,14 @@ export type VendorId =
 	| 'xai'
 	| 'poolside'
 	| 'groq'
+	| 'anthropic'
+	| 'minimax'
+	| 'liquid'
+	| 'inclusionai'
+	| 'yi'
+	| 'ibm'
+	| 'adept'
+	| 'dots'
 
 export interface Vendor {
 	id: VendorId
@@ -37,7 +45,15 @@ export const VENDORS: Record<VendorId, Vendor> = {
 	cohere: { id: 'cohere', name: 'Cohere', site: 'https://cohere.com' },
 	xai: { id: 'xai', name: 'xAI', site: 'https://x.ai' },
 	poolside: { id: 'poolside', name: 'Poolside', site: 'https://poolside.ai' },
-	groq: { id: 'groq', name: 'Groq', site: 'https://groq.com' }
+	groq: { id: 'groq', name: 'Groq', site: 'https://groq.com' },
+	anthropic: { id: 'anthropic', name: 'Anthropic', site: 'https://www.anthropic.com' },
+	minimax: { id: 'minimax', name: 'MiniMax', site: 'https://www.minimaxi.com' },
+	liquid: { id: 'liquid', name: 'Liquid AI', site: 'https://www.liquid.ai' },
+	inclusionai: { id: 'inclusionai', name: 'InclusionAI', site: 'https://www.ant-ling.com' },
+	yi: { id: 'yi', name: '01.AI', site: 'https://www.lingyiwanwu.com' },
+	ibm: { id: 'ibm', name: 'IBM', site: 'https://www.ibm.com' },
+	adept: { id: 'adept', name: 'Adept', site: 'https://www.adept.ai' },
+	dots: { id: 'dots', name: 'Dots Studio', site: 'https://studio.dots.ai' }
 }
 
 export interface Model {
@@ -404,16 +420,6 @@ export const MODELS: Model[] = [
 		context: '1M',
 		openWeights: true,
 		tags: ['open weights', 'agents']
-	},
-	{
-		slug: 'grok-4',
-		name: 'Grok 4.6',
-		vendor: 'xai',
-		apiId: 'grok-4.6',
-		description: 'xAI’s current flagship. 500K of context; grok-4.3 still reaches 1M. Prepaid credits, live access to posts on X.',
-		context: '500K',
-		openWeights: false,
-		tags: ['long context', 'realtime']
 	},
 	{
 		slug: 'laguna',
