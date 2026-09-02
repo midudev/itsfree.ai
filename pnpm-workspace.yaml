@@ -1,7 +1,13 @@
+packages:
+  - '.'
 allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
 minimumReleaseAgeExclude:
   - '@astrojs/cloudflare@14.2.6'
   - '@astrojs/internal-helpers@0.11.0'
