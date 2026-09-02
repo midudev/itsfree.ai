@@ -28,8 +28,8 @@ export const COLLECTIONS: Collection[] = [
 			'Every AI API you can call for free without handing over a card: rate limits, context windows and base URLs, checked against each provider.',
 		heading: 'Free AI APIs that never ask for a card',
 		intro: [
-			'None of the providers below take payment details to get started. Most want an email address; a couple want nothing at all. The one exception worth knowing is NVIDIA NIM, which asks for a phone number instead — still no card.',
-			'They are sorted by how much they actually give you. If you only try one, start with Groq: 14,400 requests a day on an email address, and the fastest tokens per second on this page.'
+			'None of the providers below take payment details to get started. Most want an email address; a couple want nothing at all. NVIDIA NIM, ModelScope, SiliconFlow, Zhipu and Alibaba Model Studio ask for a phone number instead — still no card.',
+			'They are sorted by how much they actually give you. If you only try one, start with Groq for speed (1,000 requests a day) or Google AI Studio for room (1,500 a day and 1M of context).'
 		],
 		layout: 'table',
 		filter: (resource) => isProvider(resource) && resource.noCard,
@@ -62,7 +62,7 @@ export const COLLECTIONS: Collection[] = [
 			{
 				question: 'How can an API be free with no account?',
 				answer:
-					'The provider rate-limits by IP instead of by key. That is why the ceilings are low — LLM7.io allows 30 requests a minute anonymously, OVHcloud just 2.'
+					'The provider rate-limits by IP instead of by key. That is why the ceilings are low — LLM7.io allows 10 requests a minute anonymously, OVHcloud just 2.'
 			},
 			{
 				question: 'Is anonymous access private?',
@@ -137,12 +137,12 @@ export const COLLECTIONS: Collection[] = [
 			{
 				question: 'Which free model is good enough to code with?',
 				answer:
-					'GLM 5 and Kimi K2 are the strongest free options for agentic work, and both are free through NVIDIA NIM and Groq. Qwen Coder is the best small model if you are running locally.'
+					'Nemotron 3 Ultra and Laguna on NVIDIA NIM, plus Groq’s GPT-OSS 120B, are the strongest free options for agentic work. Qwen Coder is the best small model if you are running locally.'
 			},
 			{
 				question: 'Will a free tier survive an agent?',
 				answer:
-					'Agents are token-hungry — a single task can run dozens of calls. A 14,400 requests-a-day tier holds up; a 5-requests-a-minute one will not. Check the rate limit, not just the daily total.'
+					'Agents are token-hungry — a single task can run dozens of calls. Google’s 1,500-a-day Gemini tier or NIM’s 40-a-minute cap hold up; a 5-requests-a-minute trial will not. Check the rate limit, not just the daily total.'
 			}
 		]
 	}

@@ -16,6 +16,10 @@
 			"src": "/icons/alibaba.png",
 			"tone": "dark"
 		},
+		"amd-radeon": {
+			"src": "/icons/amd-radeon.svg",
+			"tone": "dark"
+		},
 		"artificial-analysis": {
 			"src": "/icons/artificial-analysis.png",
 			"tone": "dark"
@@ -83,6 +87,10 @@
 		"huggingface-spaces": {
 			"src": "/icons/huggingface-spaces.png",
 			"tone": "light"
+		},
+		"inference-net": {
+			"src": "/icons/inference-net.svg",
+			"tone": "dark"
 		},
 		"isbetter-ai": {
 			"src": "/icons/isbetter-ai.svg",
@@ -166,6 +174,10 @@
 		},
 		"ovhcloud": {
 			"src": "/icons/ovhcloud.svg",
+			"tone": "dark"
+		},
+		"requesty": {
+			"src": "/icons/requesty.png",
 			"tone": "dark"
 		},
 		"sambanova": {
