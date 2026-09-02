@@ -3,6 +3,7 @@ import Favicon from './Favicon.astro';
 import PickBadge from './PickBadge.astro';
 import { searchIndex, type Resource } from '../data/resources';
 import { modelsOf } from '../data/models';
+import { homepageChips } from '../data/provider-catalogs';
 import { PROVIDERS, REQUIREMENT_SHORT } from '../data/providers';
 
 interface Props {
@@ -13,10 +14,14 @@ const { resources } = Astro.props;
 
 const rows = resources.map((resource) => {
 	const provider = PROVIDERS[resource.id];
+	const featured = modelsOf(resource.models).map((model) => ({
+		id: model.apiId ?? model.slug,
+		name: model.name
+	}));
 	return {
 		resource,
 		provider,
-		models: modelsOf(resource.models),
+		models: homepageChips(resource.id, featured),
 		signup: REQUIREMENT_SHORT[provider.requirement],
 		free: provider.requirement === 'none'
 	};
@@ -61,12 +66,18 @@ const rows = resources.map((resource) => {
 					<td class:list={['mono', 'small', { free }]}>{signup}</td>
 					<td class="includes">
 						<div class="chips" data-chips>
-							{models.map((model) => (
-								<a class="chip" href={`/model/${model.slug}/`} data-name={model.name}>
-									<Favicon id={model.vendor} kind="vendors" size={14} />
-									<span>{model.name}</span>
-								</a>
-							))}
+							{models.map((model) =>
+								model.slug ? (
+									<a class="chip" href={`/model/${model.slug}/`} data-name={model.name}>
+										{model.vendor && <Favicon id={model.vendor} kind="vendors" size={14} />}
+										<span>{model.name}</span>
+									</a>
+								) : (
+									<span class="chip" data-name={model.name}>
+										<span>{model.name}</span>
+									</span>
+								)
+							)}
 							<span class="more" data-more hidden>…</span>
 						</div>
 					</td>

@@ -1,4 +1,5 @@
 import { MODEL_BY_SLUG, modelsOf } from './models'
+import { catalogFor } from './provider-catalogs'
 
 export type Category = 'api' | 'local' | 'coding' | 'chat' | 'tool'
 
@@ -101,7 +102,15 @@ export const RESOURCES: Resource[] = [
 		category: 'api',
 		quota: '1,000 requests per day',
 		limits: ['30 requests/minute', '131K context', '7 models'],
-		models: ['gpt-oss-120b', 'gpt-oss-20b', 'qwen-3-8-27b', 'qwen-3-6-27b', 'groq-compound'],
+		models: [
+			'gpt-oss-120b',
+			'qwen-3-8-27b',
+			'gpt-oss-20b',
+			'gpt-oss-safeguard',
+			'qwen-3-6-27b',
+			'groq-compound',
+			'groq-compound-mini'
+		],
 		noCard: true,
 		openaiCompatible: true,
 		pick: true
@@ -174,7 +183,7 @@ export const RESOURCES: Resource[] = [
 		url: 'https://cloud.cerebras.ai/',
 		description: 'Wafer-scale inference. Thousands of tokens per second.',
 		category: 'api',
-		quota: '$5 trial for 30 days',
+		quota: '$5 one-time credit',
 		limits: ['5 requests/minute', '30K tokens/minute', '65K context'],
 		models: ['gpt-oss-120b', 'gemma-4-31b'],
 		noCard: false,
@@ -188,7 +197,7 @@ export const RESOURCES: Resource[] = [
 		category: 'api',
 		quota: '10,000 neurons per day',
 		limits: ['262K context', '40 models'],
-		models: ['llama-3-3-70b', 'gpt-oss-120b', 'qwen-3-8-27b'],
+		models: ['llama-3-3-70b', 'gpt-oss-120b', 'qwen-3-8-27b', 'qwen-3-30b-a3b'],
 		noCard: true,
 		openaiCompatible: true
 	},
@@ -249,7 +258,7 @@ export const RESOURCES: Resource[] = [
 		category: 'api',
 		quota: '$0.10 of credits per month',
 		limits: ['131K context', '135 models on the router'],
-		models: ['llama-3-3-70b', 'qwen-coder', 'qwen3', 'glm-5'],
+		models: ['llama-3-3-70b', 'qwen-coder', 'qwen-3-8-27b', 'glm-5'],
 		noCard: true,
 		openaiCompatible: true
 	},
@@ -261,7 +270,7 @@ export const RESOURCES: Resource[] = [
 		category: 'api',
 		quota: '2,000 requests per day',
 		limits: ['50 models', 'Phone verification'],
-		models: ['qwen3', 'glm-5', 'deepseek-v4-flash'],
+		models: ['qwen-3-8-27b', 'glm-5', 'deepseek-v4-flash'],
 		noCard: true,
 		openaiCompatible: true
 	},
@@ -566,7 +575,7 @@ export const RESOURCES: Resource[] = [
 		category: 'api',
 		quota: 'Monthly starter credits',
 		limits: ['1M context', '19 models', 'Same API as local'],
-		models: ['gpt-oss-120b', 'qwen3', 'deepseek-v4-flash'],
+		models: ['gpt-oss-120b', 'qwen-3-5-397b', 'deepseek-v4-flash'],
 		noCard: true,
 		openaiCompatible: true
 	},
@@ -659,11 +668,11 @@ export const RESOURCES: Resource[] = [
 		id: 'nebius',
 		name: 'Nebius AI Studio',
 		url: 'https://studio.nebius.com/settings/api-keys',
-		description: 'European GPU cloud with free credits and the big Qwen MoE models.',
+		description: 'European GPU cloud with a $1 trial credit. Llama 3.3 70B is the current featured id.',
 		category: 'api',
 		quota: '$1 trial for 30 days',
 		limits: ['128K context', 'EU hosted', 'Card required'],
-		models: ['llama-3-3-70b', 'qwen3'],
+		models: ['llama-3-3-70b'],
 		noCard: false,
 		openaiCompatible: true
 	},
@@ -716,12 +725,16 @@ export function resourcesForModel(slug: string): Resource[] {
 
 /** Lowercase haystack the homepage filter searches against */
 export function searchIndex(resource: Resource): string {
+	const featured = modelsOf(resource.models).map((model) => ({
+		id: model.apiId ?? model.slug,
+		name: model.name
+	}))
 	return [
 		resource.name,
 		resource.description,
 		resource.quota,
 		resource.kind ?? '',
-		...modelsOf(resource.models).map((model) => `${model.name} ${model.apiId ?? ''}`),
+		...catalogFor(resource.id, featured).map((model) => `${model.name} ${model.id}`),
 		...(resource.limits ?? [])
 	]
 		.join(' ')

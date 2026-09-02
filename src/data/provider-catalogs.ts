@@ -1,10 +1,10 @@
 /**
  * Full free catalogue per hosted API, keyed by resource id.
- * Featured chips in the table still come from resources.models.
+ * Homepage Includes chips come from this catalogue (overflow → …).
  * Verified 2 Sep 2026 against live /models lists and official docs.
  */
 
-import { MODELS } from './models'
+import { MODEL_BY_SLUG, MODELS, type VendorId } from './models'
 
 export interface CatalogModel {
 	/** Identifier exactly as the API expects it */
@@ -45,7 +45,7 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 	"amd-radeon": [
 		{ id: 'DeepSeek-V4-Flash-0731', name: 'DeepSeek V4 Flash' },
 		{ id: 'DeepSeek-V4-Flash-Vision-Exp', name: 'DeepSeek V4 Flash Vision' },
-		{ id: 'Qwen3.8-Flash-Next', name: 'Qwen 3.8 Flash Next' },
+		{ id: 'Qwen3.8-Flash-Next', name: 'Qwen3.8-Flash-Next' },
 		{ id: 'MiniCPM-V46', name: 'MiniCPM-V 4.6' },
 		{ id: 'MiniCPM5-1B', name: 'MiniCPM 5 1B' },
 	],
@@ -75,8 +75,8 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'Qwen/Qwen3-235B-A22B', name: 'Qwen 3 235B' },
 		{ id: 'Qwen/Qwen3-235B-A22B-Instruct-2507', name: 'Qwen 3 235B Instruct' },
 		{ id: 'Qwen/Qwen3-235B-A22B-Thinking-2507', name: 'Qwen 3 235B Thinking' },
-		{ id: 'Qwen/Qwen3-30B-A3B', name: 'Qwen 3 30B' },
-		{ id: 'Qwen/Qwen3-30B-A3B-Thinking-2507', name: 'Qwen 3 30B Thinking' },
+		{ id: 'Qwen/Qwen3-30B-A3B', name: 'Qwen 3 30B-A3B' },
+		{ id: 'Qwen/Qwen3-30B-A3B-Thinking-2507', name: 'Qwen 3 30B-A3B Thinking' },
 		{ id: 'Qwen/Qwen3-4B', name: 'Qwen 3 4B' },
 		{ id: 'Qwen/Qwen3-8B', name: 'Qwen 3 8B' },
 		{ id: 'Qwen/Qwen3-Coder-30B-A3B-Instruct', name: 'Qwen 3 Coder 30B' },
@@ -93,7 +93,7 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'Qwen/Qwen3.5-35B-A3B', name: 'Qwen 3.5 35B' },
 		{ id: 'Qwen/Qwen3.5-397B-A17B', name: 'Qwen 3.5 397B' },
 		{ id: 'Qwen/Qwen3.8-27B', name: 'Qwen 3.8 27B' },
-		{ id: 'Qwen/Qwen3.8-Flash-Next', name: 'Qwen 3.8 Flash Next' },
+		{ id: 'Qwen/Qwen3.8-Flash-Next', name: 'Qwen3.8-Flash-Next' },
 		{ id: 'Shanghai_AI_Laboratory/Intern-S1', name: 'Intern S1' },
 		{ id: 'Shanghai_AI_Laboratory/Intern-S1-mini', name: 'Intern S1 Mini' },
 		{ id: 'Shanghai_AI_Laboratory/Intern-S2-Preview', name: 'Intern S2' },
@@ -120,7 +120,7 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: '@cf/zai-org/glm-4.7-flash', name: 'GLM 4.7 Flash' },
 		{ id: '@cf/ibm/granite-4.0-h-micro', name: 'Granite 4.0 H Micro' },
 		{ id: '@cf/nvidia/nemotron-3-120b-a12b', name: 'Nemotron 3 Super' },
-		{ id: '@cf/qwen/qwen3-30b-a3b-fp8', name: 'Qwen 3 30B' },
+		{ id: '@cf/qwen/qwen3-30b-a3b-fp8', name: 'Qwen 3 30B-A3B' },
 		{ id: '@cf/qwen/qwen2.5-coder-32b-instruct', name: 'Qwen 2.5 Coder 32B' },
 		{ id: '@cf/qwen/qwq-32b', name: 'QwQ 32B' },
 		{ id: '@cf/mistralai/mistral-small-3.1-24b-instruct', name: 'Mistral Small 3.1' },
@@ -544,7 +544,7 @@ export const PROVIDER_CATALOGS: Record<string, CatalogModel[]> = {
 		{ id: 'nemotron-3-super', name: 'nemotron-3-super' },
 		{ id: 'nemotron-3-nano:30b', name: 'nemotron-3-nano:30b' },
 		{ id: 'gemma4:31b', name: 'gemma4:31b' },
-		{ id: 'qwen3.5:397b', name: 'qwen3.5:397b' },
+		{ id: 'qwen3.5:397b', name: 'Qwen 3.5 397B' },
 		{ id: 'nemotron-3-ultra', name: 'nemotron-3-ultra' },
 		{ id: 'glm-5.3-flash', name: 'glm-5.3-flash' },
 		{ id: 'kimi-k2.7-code', name: 'kimi-k2.7-code' },
@@ -635,8 +635,15 @@ function normalize(value: string): string {
 const ALIASES: Array<[RegExp, string]> = [
 	[/qwen3?\.?8-27b/, 'qwen-3-8-27b'],
 	[/qwen3?\.?6-27b/, 'qwen-3-6-27b'],
+	[/qwen3-30b-a3b/, 'qwen-3-30b-a3b'],
+	[/qwen3\.5[:.-]397b/, 'qwen-3-5-397b'],
+	[/qwen3\.8-flash-next/, 'qwen-3-8-flash-next'],
+	[/qwen3\.7-plus/, 'qwen-3-7-plus'],
+	[/qwen3-8b$/, 'qwen-3-8b'],
 	[/gpt-oss-120b|gpt-oss:120b/, 'gpt-oss-120b'],
 	[/gpt-oss-20b|gpt-oss:20b/, 'gpt-oss-20b'],
+	[/gpt-oss-safeguard-20b/, 'gpt-oss-safeguard'],
+	[/groq\/compound-mini/, 'groq-compound-mini'],
 	[/groq\/compound$/, 'groq-compound'],
 	[/llama-3[._-]3-70b|llama3\.3/, 'llama-3-3-70b'],
 	[/deepseek-v4/, 'deepseek-v4'],
@@ -668,5 +675,28 @@ export function catalogFor(providerId: string, featured: CatalogModel[] = []): C
 	const entries = PROVIDER_CATALOGS[providerId]
 	if (entries?.length) return entries.map(withSlug)
 	return featured.map(withSlug)
+}
+
+export interface HomepageChip {
+	name: string
+	slug?: string
+	vendor?: VendorId
+}
+
+function pinRank(row: CatalogRow): number {
+	if (row.slug === 'gpt-oss-120b' || /gpt-oss-120b/.test(row.id)) return 0
+	if (row.slug === 'qwen-3-8-27b' || /qwen3\.8-27b/i.test(row.id)) return 1
+	return 1000
+}
+
+/** Same models as the provider page, GPT-OSS 120B and Qwen 3.8 27B first. */
+export function homepageChips(providerId: string, featured: CatalogModel[] = []): HomepageChip[] {
+	return catalogFor(providerId, featured)
+		.map((row, index) => ({ row, index, pin: pinRank(row) }))
+		.sort((a, b) => a.pin - b.pin || a.index - b.index)
+		.map(({ row }) => {
+			const model = row.slug ? MODEL_BY_SLUG.get(row.slug) : undefined
+			return { name: row.name, slug: row.slug, vendor: model?.vendor }
+		})
 }
 
