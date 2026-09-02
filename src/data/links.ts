@@ -1,5 +1,5 @@
 import { MODELS } from './models'
-import { RESOURCES } from './resources'
+import { RESOURCES, resourcesForModel } from './resources'
 import { PROVIDERS } from './providers'
 
 export interface LinkGroup {
@@ -12,7 +12,7 @@ function topModels(limit: number) {
 	return [...MODELS]
 		.map((model) => ({
 			model,
-			routes: RESOURCES.filter((resource) => resource.models?.includes(model.slug)).length
+			routes: resourcesForModel(model.slug).length
 		}))
 		.sort((a, b) => b.routes - a.routes)
 		.slice(0, limit)

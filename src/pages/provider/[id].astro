@@ -7,7 +7,8 @@ import Favicon from '../../components/Favicon.astro';
 import CopyButton from '../../components/CopyButton.astro';
 import { PROVIDERS, REQUIREMENT_LABEL, LAST_VERIFIED, type Provider } from '../../data/providers';
 import { RESOURCES, type Resource } from '../../data/resources';
-import { modelsOf, VENDORS } from '../../data/models';
+import { modelsOf } from '../../data/models';
+import { catalogFor } from '../../data/provider-catalogs';
 import { snippetsFor, envLine, isLocal } from '../../data/snippets';
 import { PROVIDER_ABOUT } from '../../data/provider-about';
 import { vercelDark } from '../../styles/code-theme';
@@ -26,7 +27,11 @@ interface Props {
 }
 
 const { resource, provider } = Astro.props;
-const models = modelsOf(resource.models);
+const featured = modelsOf(resource.models).map((model) => ({
+	id: model.apiId ?? model.slug,
+	name: model.name
+}));
+const models = catalogFor(resource.id, featured);
 const snippets = snippetsFor(provider);
 const local = isLocal(provider);
 const about = PROVIDER_ABOUT[resource.id] ?? [resource.description];
@@ -216,17 +221,42 @@ const schemas = [
 		{
 			models.length > 0 && (
 				<section class="block">
-					<h2>Models you get for free</h2>
-					<ul class="models">
-						{models.map((model) => (
-							<li>
-								<a href={`/model/${model.slug}/`}>
-									<Favicon id={model.vendor} kind="vendors" size={20} />
-									<span class="model-name">{model.name}</span>
-									{model.context && <span class="model-context">{model.context}</span>}
-								</a>
-							</li>
-						))}
+					<h2>
+						Models you get for free
+						<span class="model-count">{models.length}</span>
+					</h2>
+					{
+						models.length > 8 && (
+							<label class="model-filter">
+								<span class="sr-only">Filter models</span>
+								<input
+									type="search"
+									placeholder="Filter by name or id"
+									data-model-filter
+									autocomplete="off"
+								/>
+							</label>
+						)
+					}
+					<ul class="models" data-model-list>
+						{models.map((model) => {
+							const search = `${model.name} ${model.id}`.toLowerCase();
+							return (
+								<li data-model-row data-search={search}>
+									<div class="model-row">
+										{model.slug ? (
+											<a class="model-name" href={`/model/${model.slug}/`}>
+												{model.name}
+											</a>
+										) : (
+											<span class="model-name">{model.name}</span>
+										)}
+										<code class="model-id">{model.id}</code>
+										<CopyButton value={model.id} label={`Copy ${model.id}`} />
+									</div>
+								</li>
+							);
+						})}
 					</ul>
 				</section>
 			)
@@ -253,6 +283,15 @@ const schemas = [
 			for (const panel of panels) panel.hidden = panel.dataset.panel !== tab.dataset.tab;
 		});
 	}
+
+	const filter = document.querySelector<HTMLInputElement>('[data-model-filter]');
+	const rows = [...document.querySelectorAll<HTMLElement>('[data-model-row]')];
+	filter?.addEventListener('input', () => {
+		const query = filter.value.trim().toLowerCase();
+		for (const row of rows) {
+			row.hidden = Boolean(query) && !row.dataset.search!.includes(query);
+		}
+	});
 </script>
 
 <style>
@@ -558,44 +597,90 @@ const schemas = [
 		color: var(--star);
 	}
 
+	.model-count {
+		margin-left: 8px;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		font-weight: 400;
+		letter-spacing: 0;
+		color: var(--fg-faint);
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.model-filter {
+		display: block;
+		margin: 0 0 12px;
+	}
+
+	.model-filter input {
+		width: 100%;
+		max-width: 360px;
+		padding: 8px 12px;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--bg-raised);
+		color: var(--fg);
+		font-family: var(--font-mono);
+		font-size: 12.5px;
+	}
+
+	.model-filter input::placeholder {
+		color: var(--fg-faint);
+	}
+
 	.models {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-		gap: 8px;
+		gap: 6px;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	.models a {
+	.model-row {
 		display: flex;
 		align-items: center;
-		gap: 10px;
-		padding: 10px 12px;
+		gap: 12px;
+		padding: 9px 12px;
 		border: 1px solid var(--border);
 		border-radius: 10px;
+		background: var(--bg-raised);
 		font-size: 13.5px;
-		transition:
-			border-color 0.12s ease,
-			background 0.12s ease;
-	}
-
-	.models a:hover {
-		border-color: var(--border-strong);
-		background: var(--bg-hover);
 	}
 
 	.model-name {
+		flex: none;
 		min-width: 0;
+		max-width: 42%;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
-	.model-context {
-		margin-left: auto;
+	a.model-name:hover {
+		color: var(--fg);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.model-id {
+		flex: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 		font-family: var(--font-mono);
-		font-size: 10.5px;
+		font-size: 11.5px;
 		color: var(--fg-faint);
 	}
 
