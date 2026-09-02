@@ -114,6 +114,7 @@ const badges = [
 		/* Fixed rows keep every card aligned no matter how long the copy is */
 		grid-template-rows: auto auto auto auto 1fr;
 		gap: 12px;
+		min-width: 0;
 		padding: 16px;
 		background: var(--bg-raised);
 		border: 1px solid var(--border);
@@ -226,6 +227,7 @@ const badges = [
 		display: flex;
 		align-items: center;
 		gap: 8px;
+		min-width: 0;
 		margin: 0;
 		padding: 8px 10px;
 		border: 1px solid var(--border);
@@ -300,6 +302,7 @@ const badges = [
 		align-items: flex-end;
 		justify-content: space-between;
 		gap: 8px;
+		min-width: 0;
 		padding-top: 10px;
 		border-top: 1px solid var(--border);
 	}
@@ -353,6 +356,29 @@ const badges = [
 	@media (hover: none) {
 		.share {
 			opacity: 1;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.quota {
+			flex-wrap: wrap;
+			align-items: flex-start;
+			gap: 4px 8px;
+		}
+
+		.quota-value,
+		.quota-detail {
+			flex: 1 1 auto;
+			max-width: 100%;
+			white-space: normal;
+		}
+
+		.foot {
+			flex-wrap: wrap;
+		}
+
+		.badges {
+			min-width: 0;
 		}
 	}
 </style>

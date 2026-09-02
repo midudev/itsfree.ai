@@ -69,6 +69,18 @@ links: [models, collections]
   by: cursor
   from: agent
   tech: stack each row as a card below 820px; kill horizontal overflow from FAQ/tools grids
+- [x] Fix the provider catalog on a phone {#provider-mobile}
+  by: cursor
+  from: agent
+  tech: name + copy on one line, id underneath; nothing in that list may widen the page
+- [x] Tidy the homepage chrome on a phone {#home-mobile}
+  by: cursor
+  from: agent
+  tech: 2×2 fact grid for stats; smaller filter chips; keep @midudev in the header
+- [x] Fix model-page provider cards on a phone {#model-cards}
+  by: cursor
+  from: agent
+  tech: quota stacks; card min-width 0 so nowrap mono cannot widen the page
 
 ## List every free model {#models}
 files: [src/data/models.ts, src/pages/models.astro, src/pages/model/[slug].astro]
@@ -126,6 +138,12 @@ files: [src/layouts/Layout.astro, src/lib/seo.ts, src/components/SiteHeader.astr
   tech: @astrojs/cloudflare adapter, static output, wrangler.jsonc with 404-page
 
 ## decisions
+
+- 2026-09-02: Model-page provider cards stack the quota bar on a phone (limit, then context) and set min-width: 0 so a nowrap mono line cannot push the card past the viewport. Specs and related grids use minmax(min(N, 100%), 1fr).
+
+- 2026-09-02: Homepage on a phone: hero stats become a 2×2 fact grid so the wrapping hairlines stop breaking. Filter chips shrink. The header keeps @midudev and tightens type and gap so the four links still fit one row.
+
+- 2026-09-02: Provider catalog rows stack on a phone — name and copy on the first line, id underneath. A long model id must not force a horizontal scrollbar.
 
 - 2026-09-02: On a phone the provider table becomes stacked cards, not a squeezed four-column grid. Full name and quota wrap; models, context and signup sit on one meta line; includes chips stay one line with the existing overflow ellipsis. FAQ, tools and runtime grids use `minmax(min(Npx, 100%), 1fr)` so they cannot force a horizontal scrollbar.
 

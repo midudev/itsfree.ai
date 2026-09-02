@@ -612,6 +612,58 @@ const providerListSchema = itemListSchema(
 			padding-block: 40px 32px;
 		}
 
+		.stats {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1px;
+			margin-top: 28px;
+			padding-top: 0;
+			border-top: none;
+			background: var(--border);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			overflow: hidden;
+		}
+
+		.stats div {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 3px;
+			padding: 12px 14px;
+			background: var(--bg-raised);
+		}
+
+		.stats div + div::before {
+			content: none;
+		}
+
+		.stats dd {
+			font-size: 18px;
+		}
+
+		.stats dt {
+			font-size: 11px;
+		}
+
+		.console {
+			padding: 10px 12px;
+			gap: 6px;
+		}
+
+		.chips {
+			width: 100%;
+			gap: 5px;
+		}
+
+		.chips + .chips {
+			margin-left: 0;
+		}
+
+		.chip {
+			padding: 3px 8px;
+			font-size: 10.5px;
+		}
+
 		.head-link {
 			display: none;
 		}
