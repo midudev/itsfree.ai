@@ -33,7 +33,7 @@ export const PROVIDER_ABOUT: Record<string, string[]> = {
 	],
 	cerebras: [
 		'Cerebras Cloud serves models from wafer-scale chips, which is why GPT-OSS 120B comes back at thousands of tokens a second. The public catalogue is two models: gpt-oss-120b and gemma-4-31b.',
-		'Free is a $5 / 30-day trial that needs a payment method, then you buy credits. The request cap is 5 a minute, 30K tokens a minute, a million tokens a day, and the free window is 65K. Batch work rather than firing in a loop. OpenAI-compatible at api.cerebras.ai/v1.'
+		'Signup grants $5 once. A payment method unlocks the credit; it is not a standing free tier. After the five dollars you buy more. The request cap is 5 a minute, 30K tokens a minute, a million tokens a day, and the free window is 65K. Batch work rather than firing in a loop. OpenAI-compatible at api.cerebras.ai/v1.'
 	],
 	'cloudflare-workers-ai': [
 		'Workers AI runs inference at Cloudflare’s edge, so a Worker can call a model without a round trip to a regional GPU farm. The free unit is 10,000 neurons a day, shared across the catalogue. Llama 3.3 70B, GPT-OSS 120B and Qwen 3.8 stay on that tier.',

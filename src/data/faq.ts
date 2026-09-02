@@ -11,12 +11,12 @@ export const FAQ: FaqEntry[] = [
 	{
 		question: 'Is there a free AI API that needs no credit card?',
 		answer:
-			'Most providers on this page work without one. Google AI Studio gives 1,500 Gemini requests a day on an email. Groq is the fastest on 1,000 a day. LLM7.io and Kilo’s :free models need no account at all. NVIDIA NIM, ModelScope, SiliconFlow, Zhipu and Alibaba ask for a phone number, never a card. Cerebras and Nebius want a payment method for their trial credit.'
+			'Most providers on this page work without one. Google AI Studio gives 1,500 Gemini requests a day on an email. Groq is the fastest on 1,000 a day. LLM7.io and Kilo’s :free models need no account at all. NVIDIA NIM, ModelScope, SiliconFlow, Zhipu and Alibaba ask for a phone number, never a card. Cerebras and Nebius want a payment method for their starter credit.'
 	},
 	{
 		question: 'Which free tier has the highest limits?',
 		answer:
-			'By requests, Google AI Studio at 1,500 a day, or NVIDIA NIM at 40 a minute with no published daily cap. By tokens, Cerebras at a million a day on its trial. By context, Gemini, NIM and DeepSeek V4 at 1M. There is no single winner, which is why the table above sorts.'
+			'By requests, Google AI Studio at 1,500 a day, or NVIDIA NIM at 40 a minute with no published daily cap. By tokens, Cerebras at a million a day on its $5 credit. By context, Gemini, NIM and DeepSeek V4 at 1M. There is no single winner, which is why the table above sorts.'
 	},
 	{
 		question: 'Can I ship something to production on a free tier?',

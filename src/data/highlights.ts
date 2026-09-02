@@ -64,7 +64,7 @@ export const HIGHLIGHTS: Highlight[] = [
 		id: 'cerebras',
 		name: 'Cerebras',
 		host: 'cloud.cerebras.ai',
-		why: 'Wafer-scale silicon running GPT-OSS at thousands of tokens a second. A $5 trial, then credits — stingy on requests, absurdly fast to answer.',
+		why: 'Wafer-scale silicon running GPT-OSS at thousands of tokens a second. $5 once at signup — stingy on requests, absurdly fast to answer.',
 		stat: '1M',
 		statLabel: 'tokens / day',
 		context: '65K',

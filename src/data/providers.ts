@@ -185,7 +185,7 @@ export const PROVIDERS: Record<string, Provider> = {
 		},
 		gotchas: [
 			'The public catalogue is two models: gpt-oss-120b and gemma-4-31b. Llama, Qwen and DeepSeek left.',
-			'Free is a $5 / 30-day trial that needs a payment method. After that you buy credits.',
+			'Signup grants $5 once. A payment method unlocks the credit; after the five dollars you buy more.',
 			'5 requests/minute is low — batch your work rather than firing requests in a loop.'
 		]
 	},
