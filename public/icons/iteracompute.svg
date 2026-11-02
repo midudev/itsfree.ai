@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500" role="img" aria-labelledby="title">
+  <title id="title">iteraCompute IC gradient mark</title>
+  <defs>
+    <linearGradient id="brand" x1="70" y1="450" x2="410" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#087DFF" />
+      <stop offset="0.52" stop-color="#2898FF" />
+      <stop offset="1" stop-color="#59BDFD" />
+    </linearGradient>
+  </defs>
+  <g fill="url(#brand)">
+    <path d="M449.856 137.5A225 225 0 1 0 185 463.834L185 359.544A130 130 0 1 1 367.583 185Z" />
+    <path d="M213 170H287V376A130 130 0 0 0 367.583 315L449.856 362.5A225 225 0 0 1 213 471.045Z" />
+  </g>
+</svg>
