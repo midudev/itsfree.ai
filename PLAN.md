@@ -5,6 +5,10 @@ Directory of every free way to run an AI model.
 ## Show every free provider {#providers}
 files: [src/data/providers.ts, src/data/provider-about.ts, src/data/provider-catalogs.ts, src/data/resources.ts, src/pages/index.astro, src/pages/provider/[id].astro, src/components/ProviderTable.astro]
 links: [models, collections]
+- [x] State the IteraCompute promotion end date {#iteracompute-promotion-expiry}
+  by: codex
+  from: agent
+  tech: state 24 November 2026 at 08:00 UTC in every IteraCompute offer summary
 - [x] List IteraCompute free Qwen access {#iteracompute-free}
   by: codex
   from: agent

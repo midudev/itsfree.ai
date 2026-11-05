@@ -53,8 +53,8 @@ export const PROVIDERS: Record<string, Provider> = {
 		openaiCompatible: true,
 		docsUrl: 'https://iteracompute.com/docs.html',
 		gotchas: [
-			'Free-tier limits verified 17 Oct 2026: https://iteracompute.com/free/. Only qwen/qwen3.8-27b is included; other catalog models are paid.',
-			'Input, cached input and output (including reasoning) share the account allowance across all keys. It resets on the first of each month at 00:00 UTC, with no rollover or automatic paid overage.',
+			'Time-limited promotion ending November 24, 2026 at 00:00 Pacific Time (08:00 UTC), checked 4 Nov 2026: https://iteracompute.com/free/. Only qwen/qwen3.8-27b is included; other catalog models are paid.',
+			'Input, cached input and output (including reasoning) share the account allowance across all keys. It resets on the first of each month at 00:00 UTC while the promotion is active, with no rollover or automatic paid overage.',
 			'Free context is 131,072 tokens including input and requested output; output is capped at 8,192 tokens. Shared capacity may queue, has no SLA and can return 429. Honor Retry-After.'
 		]
 	},

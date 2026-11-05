@@ -5,7 +5,7 @@
 export const PROVIDER_ABOUT: Record<string, string[]> = {
 	iteracompute: [
 		'IteraCompute hosts Qwen3.8-27B on its own infrastructure and exposes an OpenAI-compatible API at api.iteracompute.com/v1. Sign up with a verified email or Google, create an API key and use qwen/qwen3.8-27b. No credit card or recharge is required for the free tier.',
-		'The free allowance is 30 million input and output tokens per UTC calendar month, shared across account keys, with 160,000 tokens a minute, 128K total context and an 8,192-token output cap. Unused tokens do not roll over. Exhausted quota returns 429 without automatic paid overage; shared free capacity may queue and has no SLA. Paid recharge tiers increase limits but are not required for this allowance. Source: https://iteracompute.com/free/ (verified 17 Oct 2026).'
+		'This is a time-limited promotion ending November 24, 2026 at 00:00 Pacific Time (08:00 UTC). During the promotion, the free allowance is 30 million input and output tokens per UTC calendar month, shared across account keys, with 160,000 tokens a minute, 128K total context and an 8,192-token output cap. Unused tokens do not roll over. Exhausted quota returns 429 without automatic paid overage; shared free capacity may queue and has no SLA. Paid recharge tiers increase limits but are not required for this allowance. Source: https://iteracompute.com/free/ (checked 4 Nov 2026).'
 	],
 	'google-ai-studio': [
 		'Google AI Studio is the console for the Gemini API. A free key is an email away, no card, and it is one of the few endpoints here that treats images, audio, video and PDFs as first-class input. The current Flash is Gemini 3.7 — still a million tokens of context on that tier.',
